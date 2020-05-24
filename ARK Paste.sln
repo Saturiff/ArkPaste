@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28917.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARK Paste", "ARK Paste\ARK Paste.csproj", "{AD980487-5817-4E9A-A702-E4DC299B6DC6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD980487-5817-4E9A-A702-E4DC299B6DC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD980487-5817-4E9A-A702-E4DC299B6DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD980487-5817-4E9A-A702-E4DC299B6DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD980487-5817-4E9A-A702-E4DC299B6DC6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {88EAE4BA-56F8-48C4-99D0-E5C739230D3A}
+	EndGlobalSection
+EndGlobal
