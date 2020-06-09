@@ -1,0 +1,27 @@
+﻿<Window x:Class="ArkAlert.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ArkAlert"
+        mc:Ignorable="d"
+        Title="ShuiNi" Height="362.969" Width="285.25" Background="#FF63627A">
+    <Grid>
+        <TabControl HorizontalAlignment="Left" Height="252" Margin="5,8,0,0" VerticalAlignment="Top" Width="250">
+            <TabItem Header="警報" HorizontalAlignment="Left" Height="19" VerticalAlignment="Top" Width="46" Margin="-2,0,0,0">
+                <Grid Background="#FF63627A">
+                    <Button x:Name="B_LoginWX" Content="登入微信" Width="85" Height="29" Background="#00000000" BorderBrush="White" Foreground="White" FontSize="18" Click="B_LoginWX_Click" Margin="133,16,0,0" HorizontalContentAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="CheckB_ParaWarning" Content="警報" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontSize="20" Unchecked="CheckB_ParaWarning_Unchecked" Checked="CheckB_ParaWarning_Checked" Margin="16,17,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="White" Background="White"/>
+                    <WrapPanel HorizontalAlignment="Left" Margin="13,56,0,0" VerticalAlignment="Top" Orientation="Vertical">
+                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="群組名稱" VerticalAlignment="Top" FontSize="16" Foreground="White" Height="24" Width="147"/>
+                        <ComboBox x:Name="ComboB_GroupList" VerticalAlignment="Top" Height="26" SelectionChanged="ComboB_GroupList_SelectionChanged" BorderBrush="White" Background="#00000000" Foreground="Black"/>
+                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="發送內容" VerticalAlignment="Top" FontSize="16" Foreground="White" Height="24" Width="147" Margin="0,15,0,0"/>
+                        <TextBox x:Name="TB_Send" Height="68" TextWrapping="Wrap" VerticalAlignment="Top" Width="209" Text="給你的警報起個名字 !" SelectionBrush="#FF0078D7" Foreground="Black" BorderBrush="White" Background="White"/>
+                    </WrapPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <Label x:Name="Lable_info" Content="" HorizontalAlignment="Left" Margin="19,275,0,0" VerticalAlignment="Top" Foreground="White"/>
+        <Label Content="Info" HorizontalAlignment="Left" Margin="14,261,0,0" VerticalAlignment="Top" Foreground="White" RenderTransformOrigin="1.523,0.56"/>
+    </Grid>
+</Window>
