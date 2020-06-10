@@ -10,6 +10,7 @@
 
 ## ArkAlert
 偵測遊戲畫面是否有泰坦下載之消息，將警報消息傳送至已指定之微信群  
+微信群登入、傳送訊息的模塊改寫自 [Huracan/wxBot.NET](https://github.com/Huracan/wxBot.NET)  
 
 ## ArkCrosshair
 額外準心  
