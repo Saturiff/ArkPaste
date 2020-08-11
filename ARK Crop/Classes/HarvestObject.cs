@@ -4,7 +4,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Timer = System.Windows.Forms.Timer;
 
-namespace ARK_Crop.Classes
+namespace ArkHarvester.Classes
 {
     public class HarvestObject : ItemLocation
     {
@@ -14,16 +14,31 @@ namespace ARK_Crop.Classes
         public int screen2dx = 0, screen2dy = 0;
         public int itemR = 0, itemG = 0, itemB = 0;
         public bool isPaste = true;
+        private SlotData sd;
+
         public void InitAutoHarvest()
         {
             HarvestTimer = new Timer { Interval = 100 };
             HarvestTimer.Tick += new EventHandler(HarvestTimerTick);
             HarvestTimer.Start();
         }
+
+        public void UpdateFromSlotData(SlotData sd)
+        {
+            this.sd = sd;
+            location.X = this.sd.x;
+            location.Y = this.sd.y;
+            screen2dx = this.sd.x * 65535 / SystemInformation.PrimaryMonitorSize.Width;
+            screen2dy = this.sd.y * 65535 / SystemInformation.PrimaryMonitorSize.Height;
+            itemR = this.sd.r;
+            itemG = this.sd.g;
+            itemB = this.sd.b;
+        }
+
         private void PasteTimerTick(object sender, EventArgs e)
         {
             bool isPicking = false;
-            if (Properties.Settings.Default.M_Box_item_position_x != 0)
+            if (sd.isVaild)
             {
                 if (isPaste)
                 {
@@ -48,10 +63,11 @@ namespace ARK_Crop.Classes
                 }
             }
         }
+
         private void HarvestTimerTick(object sender, EventArgs e)
         {
             bool isPicking = false;
-            if (Properties.Settings.Default.M_Box_item_position_x != 0)
+            if (sd.isVaild)
             {
                 while (IsItemDetected())
                 {
@@ -65,6 +81,7 @@ namespace ARK_Crop.Classes
                 if (isPicking) PostMessage(arkHandle, 256, (int)Keys.F, 1);
             }
         }
+
         private bool IsItemDetected()
         {
             return GetColorAt(location).R == itemR

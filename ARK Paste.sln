@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28917.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARK Paste", "ARK Paste\ARK Paste.csproj", "{AD980487-5817-4E9A-A702-E4DC299B6DC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARK Crop", "ARK Crop\ARK Crop.csproj", "{19E54872-4B9A-423B-8112-F80174D7396F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArkHarvester", "ARK Crop\ArkHarvester.csproj", "{19E54872-4B9A-423B-8112-F80174D7396F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GIT", "GIT", "{839DCDF7-0514-4377-B2AC-752E54108C80}"
 	ProjectSection(SolutionItems) = preProject

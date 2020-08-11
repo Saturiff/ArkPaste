@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{19E54872-4B9A-423B-8112-F80174D7396F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>ARK_Crop</RootNamespace>
-    <AssemblyName>ARK Crop</AssemblyName>
+    <RootNamespace>ArkHarvester</RootNamespace>
+    <AssemblyName>ArkHarvester</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -91,6 +91,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\SlotData.cs" />
+    <Compile Include="Settings.cs" />
     <Page Include="ClickArea.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

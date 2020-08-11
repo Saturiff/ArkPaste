@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Point = System.Drawing.Point;
 
-namespace ARK_Crop.Classes
+namespace ArkHarvester.Classes
 {
     public class ItemLocation
     {
