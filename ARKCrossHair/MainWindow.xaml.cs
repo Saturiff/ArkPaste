@@ -36,14 +36,8 @@ namespace ARKCrossHair
 
         private void ShowButton(bool show) => Min_button.Opacity = show ? 1 : 0;
 
-        private void CB_Crosshair_Checked(object sender, RoutedEventArgs e)
-        {
-            ToggleCrosshair(true);
-        }
+        private void CB_Crosshair_Checked(object sender, RoutedEventArgs e) => ToggleCrosshair(true);
 
-        private void CB_Crosshair_Unchecked(object sender, RoutedEventArgs e)
-        {
-            ToggleCrosshair(false);
-        }
+        private void CB_Crosshair_Unchecked(object sender, RoutedEventArgs e) => ToggleCrosshair(false);
     }
 }

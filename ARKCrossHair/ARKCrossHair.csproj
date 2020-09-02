@@ -9,7 +9,7 @@
   <ItemGroup>
     <None Remove="img\crosshair.png" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <Resource Include="img\crosshair.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
