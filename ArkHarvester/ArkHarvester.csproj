@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{19E54872-4B9A-423B-8112-F80174D7396F}</ProjectGuid>
+    <ProjectGuid>{229377FC-193C-490E-9123-BA86BBD3F5BB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>ArkHarvester</RootNamespace>
     <AssemblyName>ArkHarvester</AssemblyName>

@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AD980487-5817-4E9A-A702-E4DC299B6DC6}</ProjectGuid>
+    <ProjectGuid>{FC918010-B225-4A16-9E94-AF98B8142188}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>ArkWorker</RootNamespace>
     <AssemblyName>ArkWorker</AssemblyName>
