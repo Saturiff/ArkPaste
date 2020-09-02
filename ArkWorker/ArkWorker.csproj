@@ -96,6 +96,7 @@
     <Compile Include="Classes\FarmObject.cs" />
     <Compile Include="Classes\HarvestObject.cs" />
     <Compile Include="Classes\ItemLocation.cs" />
+    <Compile Include="Classes\SlotData.cs" />
     <Compile Include="ClickArea.xaml.cs">
       <DependentUpon>ClickArea.xaml</DependentUpon>
     </Compile>

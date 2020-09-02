@@ -25,61 +25,12 @@ namespace ArkWorker.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int M_Box_item_position_x {
+        public global::ArkWorker.Classes.SlotData slotData {
             get {
-                return ((int)(this["M_Box_item_position_x"]));
+                return ((global::ArkWorker.Classes.SlotData)(this["slotData"]));
             }
             set {
-                this["M_Box_item_position_x"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int M_Box_item_position_y {
-            get {
-                return ((int)(this["M_Box_item_position_y"]));
-            }
-            set {
-                this["M_Box_item_position_y"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int M_Color_itemR {
-            get {
-                return ((int)(this["M_Color_itemR"]));
-            }
-            set {
-                this["M_Color_itemR"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int M_Color_itemG {
-            get {
-                return ((int)(this["M_Color_itemG"]));
-            }
-            set {
-                this["M_Color_itemG"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int M_Color_itemB {
-            get {
-                return ((int)(this["M_Color_itemB"]));
-            }
-            set {
-                this["M_Color_itemB"] = value;
+                this["slotData"] = value;
             }
         }
     }

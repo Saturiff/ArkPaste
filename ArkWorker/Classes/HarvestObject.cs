@@ -14,6 +14,7 @@ namespace ArkWorker
         public int screen2dx = 0, screen2dy = 0;
         public int itemR = 0, itemG = 0, itemB = 0;
         public bool isPaste = true;
+
         public void InitAutoHarvest()
         {
             HarvestTimer = new Timer { Interval = 100 };
@@ -23,7 +24,7 @@ namespace ArkWorker
         private void PasteTimerTick(object sender, EventArgs e)
         {
             bool isPicking = false;
-            if (Properties.Settings.Default.M_Box_item_position_x != 0)
+            if (Properties.Settings.Default.slotData.x != 0)
             {
                 if (isPaste)
                 {
@@ -51,7 +52,7 @@ namespace ArkWorker
         private void HarvestTimerTick(object sender, EventArgs e)
         {
             bool isPicking = false;
-            if (Properties.Settings.Default.M_Box_item_position_x != 0)
+            if (Properties.Settings.Default.slotData.x != 0)
             {
                 while (IsItemDetected())
                 {

@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 
-namespace ArkHarvester.Classes
+namespace ArkWorker.Classes
 {
     [SettingsSerializeAs(SettingsSerializeAs.Xml)]
     public class SlotData
