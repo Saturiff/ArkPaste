@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ArkHarvester"
         mc:Ignorable="d"
         Title="ClickArea" Width="1920" Height="1080" Topmost="True" WindowStyle="None" AllowsTransparency="True" Opacity=".5" Background="#00000000" >
-    
+
     <Button Content="請點擊對方物品欄中第一格物品的圖片" HorizontalAlignment="Left" Margin="0" VerticalAlignment="Top" Width="1920" Height="1080" Click="Button_Click" FontSize="50" Background="White" BorderBrush="#00000000" Foreground="#FF005AB4"/>
-    
+
 </Window>
