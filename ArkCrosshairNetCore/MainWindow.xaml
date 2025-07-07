@@ -1,0 +1,30 @@
+﻿<Window x:Class="ARKCrossHair.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ARKCrossHair"
+        mc:Ignorable="d"
+        Background="Transparent" 
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Title="" 
+        Width="150" 
+        Height="100" 
+        ResizeMode="NoResize">
+
+    <Grid  MouseEnter="ClickShowButton" MouseLeave="ClickHideButton" MouseLeftButtonDown="ClickDrag" Background="#FF63627A" Margin="0">
+        <CheckBox x:Name="CB_Crosshair" Content="開啟準心" HorizontalAlignment="Left" Margin="24,35,0,0" VerticalAlignment="Top" FontSize="18" Foreground="White" Checked="CB_Crosshair_Checked" Unchecked="CB_Crosshair_Unchecked"/>
+        
+        <!-- 視窗操作 -->
+        <WrapPanel Margin="0" VerticalAlignment="Top" HorizontalAlignment="Right">
+
+            <Button x:Name="Min_button"     Content="—" Height="20" Width="20" Background="#02FFFFFF" Foreground="#FF9B9B9B" 
+                    MouseEnter="ClickShowButton" MouseLeave="ClickHideButton" Click="ClickMin"/>
+
+            <Button x:Name="Close_button"   Content="X" Height="20" Width="20" Background="#02FFFFFF" Foreground="#FF9B9B9B" 
+                    MouseEnter="ClickShowButton" MouseLeave="ClickHideButton" Click="ClickExit" />
+
+        </WrapPanel>
+    </Grid>
+</Window>
