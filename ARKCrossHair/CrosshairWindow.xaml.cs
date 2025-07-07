@@ -1,26 +1,33 @@
 ﻿using System;
-using System.Runtime.InteropServices;
+// using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
-using System.Windows.Media;
+// using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace ARKCrossHair
+namespace ArkCrosshair
 {
     public partial class CrosshairWindow : Window
     {
         public CrosshairWindow()
         {
             InitializeComponent();
-            CompositionTarget.Rendering += new EventHandler(CompositionTarget_Rendering);
+            // CompositionTarget.Rendering += new EventHandler(CompositionTarget_Rendering);
             WindowStartupLocation = WindowStartupLocation.Manual;
             Opacity = 1.0;
-
-            arkHandle = FindWindow(null, "ARK: Survival Evolved");
+            Left = 0;
+            Top = 0;
+            Width = 1922;
+            Height = 1082;
+            // Width = 2562;
+            // Height = 1442;
+            // arkHandle = FindWindow(null, "ARK: Survival Evolved");
 
             InitCrosshair();
         }
 
+
+        /*
         private void CompositionTarget_Rendering(object sender, EventArgs e)
         {
             if (arkHandle != IntPtr.Zero)
@@ -42,8 +49,8 @@ namespace ARKCrossHair
                 // int bottomBorder = wrect.Bottom - rightbottom.Y; // As above
                 int topBorderWithTitleBar = lefttop.Y - wrect.Top;  // There is no transparent part
 
-                Left = wrect.Left + leftBorder;
-                Top = wrect.Top + topBorderWithTitleBar;
+                Left = wrect.Left + leftBorder + 0.5;
+                Top = wrect.Top + topBorderWithTitleBar + 0.5;
                 Width = crect.Right;
                 Height = crect.Bottom;
             }
@@ -54,11 +61,12 @@ namespace ARKCrossHair
                 Width = 1920;
                 Height = 1080;
             }
-        }
+        }*/
 
-        private IntPtr arkHandle;
+        // private IntPtr arkHandle;
         protected override void OnSourceInitialized(EventArgs e)
         {
+            base.OnSourceInitialized(e);
             WindowsServices.SetWindowExTransparent(new WindowInteropHelper(this).Handle);
         }
 
@@ -71,7 +79,7 @@ namespace ARKCrossHair
             bitmapImg.EndInit();
             Img_Crosshair.Source = bitmapImg;
         }
-
+        /*
         #region DLL
 
         [DllImport("user32.dll")]
@@ -104,6 +112,6 @@ namespace ARKCrossHair
         private static extern IntPtr FindWindow(string className, string windowName);
 
         #endregion
-
+        */
     }
 }

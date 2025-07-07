@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace ARKCrossHair
+namespace ArkCrosshair
 {
     public partial class MainWindow : Window
     {
@@ -16,9 +16,9 @@ namespace ARKCrossHair
         private void ToggleCrosshair(bool isEnable)
         {
             if (isEnable) crosshairW.Show();
-            else          crosshairW.Hide();
+            else crosshairW.Hide();
         }
-        
+
         private void ClickMin(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
 
         private void ClickExit(object sender, RoutedEventArgs e)
