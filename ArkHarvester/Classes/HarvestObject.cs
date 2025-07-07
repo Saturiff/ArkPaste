@@ -63,8 +63,37 @@ namespace ArkHarvester.Classes
                 }
             }
         }
-
         private void HarvestTimerTick(object sender, EventArgs e)
+        {
+            if (!sd.isVaild)
+            {
+                return;
+            }
+
+            HarvestImpl_Maker(sender, e);
+        }
+
+        private void HarvestImpl_Maker(object sender, EventArgs e)
+        {
+            if (IsItemDetected())
+            {
+                HarvestTimer.Stop();
+                mouse_event(0x8000 | 0x0001,
+                            screen2dx,
+                            screen2dy, 0, 0); //move
+                Thread.Sleep(10);
+
+                for (int i = 0; i < 10; i++)
+                {
+                    PostMessage(arkHandle, 256, (int)Keys.A, 1);
+                    Thread.Sleep(50);
+                }
+                PostMessage(arkHandle, 256, (int)Keys.F, 1);
+                HarvestTimer.Start();
+            }
+        }
+
+        private void HarvestImpl_Paste(object sender, EventArgs e)
         {
             bool isPicking = false;
             if (sd.isVaild)
@@ -84,9 +113,13 @@ namespace ArkHarvester.Classes
 
         private bool IsItemDetected()
         {
-            return GetColorAt(location).R == itemR
-                    && GetColorAt(location).G == itemG
-                    && GetColorAt(location).B == itemB;
+            //return GetColorAt(location).R == itemR
+            //        && GetColorAt(location).G == itemG
+            //        && GetColorAt(location).B == itemB;
+
+            return Math.Abs(GetColorAt(location).R - itemR) < 5
+                    && Math.Abs(GetColorAt(location).G - itemG) < 5
+                    && Math.Abs(GetColorAt(location).B - itemB) < 5;
         }
 
 

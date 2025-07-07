@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ArkWorker"
         mc:Ignorable="d"
-        Title="ShuiNi" Height="346.969" Width="266.583" ShowInTaskbar="False" Background="#FF63627A" Topmost="True" ResizeMode="CanMinimize">
+        Title="ShuiNi" Height="346.969" Width="266.583" Background="#FF63627A" Topmost="True" ResizeMode="CanMinimize">
     <Grid>
         <TabControl HorizontalAlignment="Left" Height="223" Margin="5,8,0,0" VerticalAlignment="Top" Width="235">
             
@@ -31,7 +31,13 @@
                         </Button.Background>
                     </Button>
 
-                    <CheckBox x:Name="CB_BlackSlot" Content="黑格偵測" HorizontalAlignment="Left" Margin="65,154,0,0" VerticalAlignment="Top"  Width="100" Height="30" Foreground="White" BorderBrush="White" FontSize="20" Checked="CB_BlackSlot_Checked" Unchecked="CB_BlackSlot_Unchecked"/>
+                    <CheckBox x:Name="CB_BlackSlot" Content="黑格偵測" HorizontalAlignment="Left" Margin="10,156,0,0" VerticalAlignment="Top"  Width="100" Height="30" Foreground="White" BorderBrush="White" FontSize="20" Checked="CB_BlackSlot_Checked" Unchecked="CB_BlackSlot_Unchecked"/>
+                    
+                    <Button x:Name="B_Drop" Content="卸除負重" HorizontalAlignment="Left" Margin="119,156,0,0" VerticalAlignment="Top" Width="100" Height="30" Click="Click_B_Drop" Foreground="White" BorderBrush="White" FontSize="20">
+                        <Button.Background>
+                            <SolidColorBrush Color="#FFDDDDDD" Opacity="0"/>
+                        </Button.Background>
+                    </Button>
 
                 </Grid>
 

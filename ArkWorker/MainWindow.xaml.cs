@@ -23,6 +23,8 @@ namespace ArkWorker
 
         private void Click_B_End(object sender, RoutedEventArgs e) => FarmEnd();
 
+        private void Click_B_Drop(object sender, RoutedEventArgs e) => FarmDrop();
+
         private void CB_BlackSlot_Checked(object sender, RoutedEventArgs e) => farm.enableBlackSlotCheck = true;
 
         private void CB_BlackSlot_Unchecked(object sender, RoutedEventArgs e) => farm.enableBlackSlotCheck = false;
@@ -45,6 +47,7 @@ namespace ArkWorker
         private void FarmPause()
         {
             ToggleFarmButton(true);
+            farm.FarmPause();
             ShowMessage("背景推土已停止");
         }
 
@@ -53,10 +56,16 @@ namespace ArkWorker
             farm.FarmEnd();
         }
 
+        private void FarmDrop()
+        {
+            farm.FarmDrop();
+        }
+
         private void ToggleFarmButton(bool enable)
         {
             B_StartFarm.IsEnabled = enable;
             B_PauseFarm.IsEnabled = !enable;
+            B_Drop.IsEnabled = !enable;
         }
 
         public void ShowMessage(string msg)
