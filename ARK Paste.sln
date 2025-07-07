@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28917.181
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GIT", "GIT", "{839DCDF7-0514-4377-B2AC-752E54108C80}"
 	ProjectSection(SolutionItems) = preProject
@@ -21,6 +21,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArkCrosshair", "ArkCrosshair\ArkCrosshair.csproj", "{3AA7A4CA-ECF9-443D-9852-9EFAA77B3E44}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoE", "AutoE\AutoE.csproj", "{8EDD4BAB-0982-4AB0-82AE-23D5D561186B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArkScriptEditor", "ArkScriptEditor\ArkScriptEditor.csproj", "{3AD9CF4D-5D89-4175-9202-BD1AA3693B13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +58,10 @@ Global
 		{8EDD4BAB-0982-4AB0-82AE-23D5D561186B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EDD4BAB-0982-4AB0-82AE-23D5D561186B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EDD4BAB-0982-4AB0-82AE-23D5D561186B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AD9CF4D-5D89-4175-9202-BD1AA3693B13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AD9CF4D-5D89-4175-9202-BD1AA3693B13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AD9CF4D-5D89-4175-9202-BD1AA3693B13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AD9CF4D-5D89-4175-9202-BD1AA3693B13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
