@@ -7,6 +7,25 @@
         mc:Ignorable="d"
         Title="ShuiNi" Height="442" Width="641" ShowInTaskbar="False" Background="#FF63627A" Topmost="True" ResizeMode="CanMinimize">
     <Grid>
-
+        <TextBox Name="TB_Log" TextWrapping="Wrap" Text="TextBox" Margin="5,350,5,5" Foreground="White" Background="Transparent"/>
+        <ListView Name="List_Script" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="5,41,461,86" Foreground="White" Background="Transparent">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="描述/名稱" DisplayMemberBinding="{Binding Desc}"/>
+                    <GridViewColumn Header="執行中" DisplayMemberBinding="{Binding State}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <TextBox x:Name="TB_ActionEditor" TextWrapping="Wrap" Text="TextBox" Margin="190,126,7,86" Foreground="White" Background="Transparent"/>
+        <GroupBox Header="Script Infomation" Margin="190,-1,8,312" Foreground="White">
+            <WrapPanel Orientation="Horizontal">
+                <TextBlock Name="Text_ScriptInfo" HorizontalAlignment="Left" Margin="11,0,0,0" TextWrapping="Wrap" Text="TextBlock" Height="84" Width="193"/>
+                <WrapPanel Orientation="Vertical">
+                    <CheckBox Name="Check_StartScript" Content="執行工作" Foreground="White"/>
+                </WrapPanel>
+            </WrapPanel>
+        </GroupBox>
+        <Button Content="新增 Lua Script" HorizontalAlignment="Left" Margin="6,8,0,0" Padding="8,3" VerticalAlignment="Top" Foreground="White" Background="Transparent" BorderBrush="White"/>
+        <Button Content="重新整理" HorizontalAlignment="Left" Margin="113,8,0,0" Padding="8,3" VerticalAlignment="Top" Foreground="White" Background="Transparent" BorderBrush="White"/>
     </Grid>
 </Window>
