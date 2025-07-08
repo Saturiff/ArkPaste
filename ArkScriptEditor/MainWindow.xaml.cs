@@ -2,7 +2,6 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Xml.Linq;
 
 namespace ArkScriptEditor
 {
@@ -12,12 +11,13 @@ namespace ArkScriptEditor
 
         private static readonly List<Script> scripts = [];
 
-        private Script currentScript;
-
         public MainWindow()
         {
             InitializeComponent();
-            
+
+            B_AddScript.Click += B_AddScript_Click;
+            B_RefreshScript.Click += B_RefreshScript_Click;
+
             // lua script info group box
 
             Text_ScriptInfo.Text = "";
@@ -39,22 +39,41 @@ namespace ArkScriptEditor
 
         }
 
+        private void B_AddScript_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void B_RefreshScript_Click(object sender, RoutedEventArgs e)
+        {
+            ScanScriptFiles();
+        }
+
         private void Check_StartScript_Checked(object sender, RoutedEventArgs e)
         {
             CheckBox checkBox = (CheckBox)sender;
             bool running = checkBox.IsChecked ?? false;
-            currentScript.State = running ? ScriptState.Running : ScriptState.Idle;
+            Script? script = GetCurrentScript();
+            if (script != null)
+            {
+                script.State = running ? ScriptState.Running : ScriptState.Idle;
+            }
+
+            // TODO: Change tab text color
+
+            // TODO: Run script
         }
 
         private void List_Script_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ListView listView = (ListView)sender;
-            currentScript = (Script)listView.SelectedItem;
-            Text_ScriptInfo.Text = currentScript.Name;
-
-            if (!Check_StartScript.IsEnabled)
+            Script? script = GetCurrentScript();
+            if (script != null)
             {
-                Check_StartScript.IsEnabled = true;
+                Text_ScriptInfo.Text = script.ToString();
+            }
+            else
+            {
+                Text_ScriptInfo.Text = "";
             }
         }
 
@@ -76,9 +95,25 @@ namespace ArkScriptEditor
 
         private void ScanScriptFiles()
         {
-            string[] filePaths = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.lua");
+            if (scripts.Count > 0)
+            {
+                scriptReader.Clear();
+                
+                // TODO: Stop/Clear all running script
+
+                scripts.Clear();
+            }
+
+            string scriptDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Script");
+            string[] filePaths = Directory.GetFiles(scriptDir, "*.lua");
             foreach (string path in filePaths)
             {
+                if (scriptReader.LoadScriptHide(path))
+                {
+                    Logger.Info(this, string.Format("略過了一個隱藏的腳本"));
+                    continue;
+                }
+                
                 string name = Path.GetFileNameWithoutExtension(path);
                 string desc = scriptReader.LoadScriptDescription(path);
                 if (desc == "")
@@ -98,6 +133,22 @@ namespace ArkScriptEditor
                 Logger.Info(this, string.Format("找到了腳本: {0} [{1}]", desc, name));
             }
             List_Script.ItemsSource = scripts;
+
+            if (scripts.Count > 0)
+            {
+                List_Script.SelectedItem = scripts[0];
+                Check_StartScript.IsEnabled = true;
+            }
+        }
+
+        private Script? GetCurrentScript()
+        {
+            Script? script = (Script)List_Script.SelectedItem;
+            if (script == null)
+            {
+                Logger.Warn(this, string.Format("GetCurrentScript when script is null. Selected: {0}", List_Script.SelectedItem));
+            }
+            return script;
         }
     }
 }
