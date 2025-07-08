@@ -21,10 +21,10 @@ GlobalDelay = 50
     按照需要的動作撰寫
 ]]--
 function Run()
-    H.Data = {}
+    H.data = {}
     -- 在這個方法內新增你的腳本動作
 
 
 
-    return H.Data
+    return H.data
 end

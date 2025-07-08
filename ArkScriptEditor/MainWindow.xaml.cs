@@ -46,6 +46,7 @@ namespace ArkScriptEditor
 
         private void B_RefreshScript_Click(object sender, RoutedEventArgs e)
         {
+            Logger.Info(this, "準備重新讀取\n");
             ScanScriptFiles();
         }
 
@@ -70,6 +71,8 @@ namespace ArkScriptEditor
             if (script != null)
             {
                 Text_ScriptInfo.Text = script.ToString();
+
+                scriptReader.LoadScriptRun(script.Path);
             }
             else
             {
@@ -97,6 +100,7 @@ namespace ArkScriptEditor
         {
             if (scripts.Count > 0)
             {
+                Logger.Info(this, "Rescaning...");
                 scriptReader.Clear();
                 
                 // TODO: Stop/Clear all running script

@@ -67,37 +67,79 @@ namespace ArkScriptEditor.Classes
             return value;
         }
 
-        public object[]? LoadScriptRun(string scriptPath)
+        public void LoadScriptRun(string scriptPath)
         {
             Lua? lua = LoadLua(scriptPath);
             if (lua == null)
             {
                 Logger.Error(this, "無法讀取 Run 方法 (腳本異常)");
-                return null;
+                return;
             }
 
             LuaFunction runFunc = (LuaFunction)lua["Run"];
             if (runFunc == null)
             {
                 Logger.Error(this, "無法讀取 Run 方法 (請檢查方法是否存在與合法)");
-                return null;
+                return;
             }
 
             object[] runData = runFunc.Call();
 
-            LuaTable actions = (LuaTable)runData[0];
+            ResolveActionTable(runData[0]);
+
+            return;
+        }
+
+        private void ResolveActionTable(object tableObject, int depth = 0)
+        {
+            string indent = new string(' ', depth * 4);
+
+            LuaTable actions = (LuaTable)tableObject;
+            if (actions.Values.Count == 0)
+            {
+                Logger.Info(this, string.Format("{0}這是一個空的動作清單", indent));
+                return;
+            }
+
             foreach (LuaTable action in actions.Values)
             {
                 string type = (string)action["type"];
-                if (type == "Wait")
+                switch (type)
                 {
-                    long time = (long)action["time"];
-                    Logger.Info(this, string.Format("等待 {0} 毫秒", time));
+                    case "Wait": // (time)
+                        long time = (long)action["time"];
+                        Logger.Info(this, string.Format("{0}等待 {1} 毫秒", indent, time));
+                        break;
+                    case "WaitColor": // (x, y, color)
+                        long wait_x = (long)action["x"];
+                        long wait_y = (long)action["y"];
+                        string color = (string)action["color"];
+                        Logger.Info(this, string.Format("{0}等待直到 ({1}, {2}) 出現顏色 {3}", indent, wait_x, wait_y, color));
+                        break;
+                    case "SetCursorPos": // (x, y)
+                        long to_x = (long)action["x"];
+                        long to_y = (long)action["y"];
+                        Logger.Info(this, string.Format("{0}滑鼠移動到 ({1}, {2})", indent, to_x, to_y));
+                        break;
+                    case "LMBClick": // ()
+                        Logger.Info(this, string.Format("{0}點一下左鍵", indent));
+                        break;
+                    case "PressKey": // (keys)
+                        string keys = (string)action["keys"];
+                        Logger.Info(this, string.Format("{0}按下按鍵 {1}", indent, keys));
+                        break;
+                    case "Repeat": // (count, actions)
+                        long count = (long)action["count"];
+                        Logger.Info(this, string.Format("{0}重複執行 {1} 次:", indent, count));
+                        object obj = action["actions"];
+                        ResolveActionTable(obj, depth + 1);
+                        break;
+                    default:
+                        string exceptionMessage = string.Format("未處理的 action: {0}", type);
+                        Logger.Error(this, exceptionMessage);
+                        throw new Exception(exceptionMessage);
                 }
-                // TODO: dict <action type, action function>
-
             }
-            return runData;
         }
 
         private Lua? LoadLua(string scriptPath)

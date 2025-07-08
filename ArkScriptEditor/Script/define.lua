@@ -12,7 +12,7 @@ Hide = true
 -- 暫停腳本，等待 x 毫秒後才繼續執行
 -- 範例: Wait(500)
 function M:Wait(time)
-    table.insert(M.Data, {
+    table.insert(self.data, {
         type = "Wait",
         time = time,
     })
@@ -24,9 +24,10 @@ end
 -- 暫停腳本，等待螢幕位置 x, y 為指定顏色後才繼續執行
 -- 範例: WaitColor(800, 600, "ffffff")
 function M:WaitColor(x, y, color)
-    table.insert(M.Data, {
+    table.insert(self.data, {
         type = "WaitColor",
-        position = {x, y},
+        x = x,
+        y = y,
         color = color,
     })
 end
@@ -36,16 +37,17 @@ end
 -- 設定游標位置至 x, y
 -- 範例: SetCursorPos(800, 600)
 function M:SetCursorPos(x, y)
-    table.insert(M.Data, {
+    table.insert(self.data, {
         type = "SetCursorPos",
-        position = {x, y},
+        x = x,
+        y = y,
     })
 end
 
 -- 按下左鍵
 -- 範例: LMBClick()
 function M:LMBClick()
-    table.insert(M.Data, {
+    table.insert(self.data, {
         type = "LMBClick",
     })
 end
@@ -55,13 +57,13 @@ end
 -- 範例: PressKey("F")
 -- 範例: PressKey("ADV")
 function M:PressKey(keys)
-    table.insert(M.Data, {
+    table.insert(self.data, {
         type = "PressKey",
         keys = keys,
     })
 end
 
----@param times integer 重複的次數
+---@param count integer 重複的次數
 ---@param actions table 重複的內容
 -- 按下按鍵或輸入字串，支援英數[A-Z][0-9]，注意輸入法
 -- 範例:
@@ -69,12 +71,17 @@ end
 --     PressKey("A"),
 --     Wait(500),
 -- })
--- 範例: PressKey("ADV")
-function M:Repeat(times, actions)
-    table.insert(M.Data, {
+function M:Repeat(count, func)
+    -- 讓新容器承接repeat的內容
+    local actions = {}
+    local oldData = self.data
+    self.data = actions
+    func()
+    self.data = oldData
+    table.insert(self.data, {
         type = "Repeat",
-        times = times,
-        actions = actions,
+        count = count,
+        actions = actions
     })
 end
 

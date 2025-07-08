@@ -21,18 +21,19 @@ GlobalDelay = 50
     按照需要的動作撰寫
 ]]--
 function Run()
-    H.Data = {}
+    H.data = {}
     -- 在這個方法內新增你的腳本動作
+    H:Wait(500)
+    H:WaitColor(800, 600, "ffffff")
+    H:SetCursorPos(800, 600)
+    H:LMBClick()
+    H:PressKey("F")
+    H:PressKey("ADV")
 
+    H:Repeat(10, function()
+        H:PressKey("A")
+        H:Wait(500)
+    end)
 
-    H:Wait(10)
-    H:Wait(100)
-    H:Wait(1000)
-
-
-    H:Repeat(10, {
-        H:PressKey("A"),
-        H:Wait(1000),
-    })
-    return H.Data
+    return H.data
 end
