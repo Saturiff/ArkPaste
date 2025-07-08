@@ -20,15 +20,19 @@ end
 
 ---@param x integer 游標位置X
 ---@param y integer 游標位置Y
----@param color string 顏色代號，共六碼
--- 暫停腳本，等待螢幕位置 x, y 為指定顏色後才繼續執行
--- 範例: WaitColor(800, 600, "ffffff")
-function M:WaitColor(x, y, color)
+---@param r integer 紅色值
+---@param g integer 藍色值
+---@param b integer 綠色值
+-- 暫停腳本，等待螢幕位置 x, y 為指定顏色後才繼續執行，內建容差值
+-- 範例: WaitColor(800, 600, 255, 128, 0)
+function M:WaitColor(x, y, r, g, b)
     table.insert(self.data, {
         type = "WaitColor",
         x = x,
         y = y,
-        color = color,
+        r = r,
+        g = g,
+        b = b,
     })
 end
 

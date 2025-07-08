@@ -1,4 +1,4 @@
-H = require("Script.define")
+﻿H = require("Script.define")
 --[[
     腳本設定:
     按照需求更改值
@@ -8,7 +8,7 @@ H = require("Script.define")
 ]]--
 
 ---@type string 腳本描述
-Description = "替換成你的描述"
+Description = "test 開發測試"
 
 ---@type boolean 是否隱藏
 Hide = false
@@ -23,6 +23,7 @@ GlobalDelay = 50
 function Run()
     H.data = {}
     -- 在這個方法內新增你的腳本動作
+
     H:Wait(500)
     H:WaitColor(800, 600, 255, 128, 0)
     H:SetCursorPos(800, 600)

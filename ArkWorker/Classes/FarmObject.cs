@@ -4,10 +4,7 @@ using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Windows;
 using System.Windows.Forms;
-using System.Windows.Input;
-using Clipboard = System.Windows.Clipboard;
 using Point = System.Drawing.Point;
 using Timer = System.Windows.Forms.Timer;
 
@@ -22,10 +19,6 @@ namespace ArkWorker
         public int blackSoltCnt = 0;
 
         public const int blackSlotDelay = 300;
-
-        private readonly object screenPixel;
-
-        private readonly object farm;
 
         private IntPtr arkHandle;
 

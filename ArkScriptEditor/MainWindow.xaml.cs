@@ -62,7 +62,8 @@ namespace ArkScriptEditor
 
             // TODO: Change tab text color
 
-            // TODO: Run script
+            // TODO: Run/Stop runner script
+
         }
 
         private void List_Script_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -72,7 +73,9 @@ namespace ArkScriptEditor
             {
                 Text_ScriptInfo.Text = script.ToString();
 
-                scriptReader.LoadScriptRun(script.Path);
+                
+                List<IScriptAction> actions = scriptReader.LoadScriptActions(script.Path);
+                // TODO: Init runner with actions
             }
             else
             {
@@ -102,7 +105,7 @@ namespace ArkScriptEditor
             {
                 Logger.Info(this, "Rescaning...");
                 scriptReader.Clear();
-                
+
                 // TODO: Stop/Clear all running script
 
                 scripts.Clear();
@@ -117,7 +120,7 @@ namespace ArkScriptEditor
                     Logger.Info(this, string.Format("略過了一個隱藏的腳本"));
                     continue;
                 }
-                
+
                 string name = Path.GetFileNameWithoutExtension(path);
                 string desc = scriptReader.LoadScriptDescription(path);
                 if (desc == "")
