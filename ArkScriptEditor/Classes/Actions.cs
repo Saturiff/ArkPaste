@@ -1,9 +1,5 @@
-﻿using System;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Threading;
+﻿using System.Drawing;
 using System.Windows.Forms;
-using System.Windows.Input;
 using Point = System.Drawing.Point;
 
 namespace ArkScriptEditor.Classes
@@ -14,6 +10,7 @@ namespace ArkScriptEditor.Classes
     {
         private readonly long time = time;
 
+        // runtime
         private long startTime = -1;
 
         public bool Execute(ScriptRunner ctx)
@@ -23,7 +20,14 @@ namespace ArkScriptEditor.Classes
                 startTime = ctx.DeltaMillisecond;
             }
 
-            return (ctx.DeltaMillisecond - startTime) >= time;
+            bool result = (ctx.DeltaMillisecond - startTime) >= time;
+            if (result)
+            {
+                // runtime reset
+                startTime = -1;
+                return true;
+            }
+            return false;
         }
     }
 
@@ -86,9 +90,10 @@ namespace ArkScriptEditor.Classes
 
             currentIndex = 0;
         }
-        
+
         private readonly Keys[] keysArr;
 
+        // runtime
         private int currentIndex;
 
         public bool Execute(ScriptRunner ctx)
@@ -98,12 +103,16 @@ namespace ArkScriptEditor.Classes
                 ScriptLibrary.PressKey(ctx.HWnd, keysArr[currentIndex++]);
                 return false;
             }
+
+            // runtime reset
+            currentIndex = 0;
             return true;
         }
     }
 
     internal class Action_Repeat(long count, List<IScriptAction> actions) : IScriptAction
     {
+        // runtime
         private int currentCount;
         private int currentIndex;
 
@@ -125,12 +134,21 @@ namespace ArkScriptEditor.Classes
                     currentCount++;
                 }
             }
-            return true;
+
+            if (currentCount >= count)
+            {
+                // runtime reset
+                currentCount = 0;
+                currentIndex = 0;
+                return true;
+            }
+            return false;
         }
     }
 
     interface IScriptAction
     {
         bool Execute(ScriptRunner ctx);
+        void Reset() { }
     }
 }

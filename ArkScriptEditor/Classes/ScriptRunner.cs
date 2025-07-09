@@ -77,9 +77,7 @@ namespace ArkScriptEditor.Classes
             var actions = script.Actions ?? [];
             if (currentActionIndex >= actions.Count)
             {
-                Stop();
-                Logger.Warn(this, "stop script: index oob");
-                return;
+                currentActionIndex = 0;
             }
 
             if (actions[currentActionIndex].Execute(this))

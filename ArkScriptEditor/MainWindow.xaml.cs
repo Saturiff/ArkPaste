@@ -1,4 +1,5 @@
 ﻿using ArkScriptEditor.Classes;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,7 +10,7 @@ namespace ArkScriptEditor
     {
         private static readonly LuaScriptReader scriptReader = new LuaScriptReader();
 
-        private static readonly List<Script> scripts = [];
+        private static readonly ObservableCollection<Script> scripts = [];
 
         private static readonly Dictionary<string, ScriptRunner> scriptRunners = [];
 

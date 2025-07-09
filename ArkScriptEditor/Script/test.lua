@@ -14,7 +14,7 @@ Description = "test 開發測試"
 Hide = false
 
 ---@type integer 動作全局間隔，最低20
-GlobalDelay = 50
+GlobalDelay = 100
 
 --[[
     腳本本體:
@@ -23,18 +23,32 @@ GlobalDelay = 50
 function Run()
     H.data = {}
     -- 在這個方法內新增你的腳本動作
-
-    H:Wait(500)
-    H:WaitColor(800, 600, 255, 128, 0)
-    H:SetCursorPos(800, 600)
+    
+    H:WaitColor(882, 146, 128, 231, 255)
+    H:SetCursorPos(1069, 192)
     H:LMBClick()
-    H:PressKey("F")
-    H:PressKey("ADV")
-
+    H:PressKey("DV")
+    H:WaitColor(1065, 239, 140, 155, 162)
+    H:SetCursorPos(1065, 239)
+    H:LMBClick()
     H:Repeat(10, function()
         H:PressKey("A")
-        H:Wait(500)
+        -- H:Wait(50)
     end)
+
+    H:PressKey("F")
+
+    -- H:Wait(500)
+    -- H:WaitColor(800, 600, 255, 128, 0)
+    -- H:SetCursorPos(800, 600)
+    -- H:LMBClick()
+    -- H:PressKey("F")
+    -- H:PressKey("ADV")
+
+    -- H:Repeat(10, function()
+    --     H:PressKey("A")
+    --     H:Wait(500)
+    -- end)
 
     return H.data
 end
