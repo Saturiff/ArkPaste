@@ -1,5 +1,4 @@
 ﻿using NLua;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -48,11 +47,12 @@ namespace ArkScriptEditor.Classes
             if (lua == null)
             {
                 Logger.Error(this, "無法讀取全局延遲 (腳本異常)");
-                return 20;
+                return 50;
             }
 
-            int value = (int)lua["GlobalDelay"];
-            return Math.Clamp(value, 20, value);
+            double value = (double)lua["GlobalDelay"];
+
+            return Math.Clamp((int)value, 50, (int)value);
         }
 
         public bool LoadScriptHide(string scriptPath)
@@ -68,39 +68,42 @@ namespace ArkScriptEditor.Classes
             return value;
         }
 
-        public List<IScriptAction> LoadScriptActions(string scriptPath)
+        public List<IScriptAction> LoadScriptActions(string scriptPath, out string actionDump)
         {
             Logger.Info(this, string.Format("開始讀取 {0} 的動作清單...", Path.GetFileName(scriptPath)));
 
             Lua? lua = LoadLua(scriptPath);
             if (lua == null)
             {
-                Logger.Error(this, "無法讀取 Run 方法 (腳本異常)");
+                actionDump = "無法讀取 Run 方法 (腳本異常)";
+                Logger.Error(this, actionDump);
                 return [];
             }
 
             LuaFunction runFunc = (LuaFunction)lua["Run"];
             if (runFunc == null)
             {
-                Logger.Error(this, "無法讀取 Run 方法 (請檢查方法是否存在與合法)");
+                actionDump = "無法讀取 Run 方法 (請檢查方法是否存在與合法)";
+                Logger.Error(this, actionDump);
                 return [];
             }
 
             object[] runData = runFunc.Call();
-            var result = ResolveActionTable(runData[0]);
+            (List<IScriptAction> actions, actionDump) = ResolveActionTable(runData[0]);
             Logger.Info(this, "讀取結束\n");
-            return result;
+            return actions;
         }
 
-        private List<IScriptAction> ResolveActionTable(object tableObject, int depth = 0)
+        private (List<IScriptAction>, string) ResolveActionTable(object tableObject, int depth = 0)
         {
             string indent = new string(' ', depth * 4);
+            string actionDump = "";
 
             LuaTable actionTables = (LuaTable)tableObject;
             if (actionTables.Values.Count == 0)
             {
-                Logger.Info(this, string.Format("{0}這是一個空的動作清單", indent));
-                return [];
+                actionDump += string.Format("{0}這是一個空的動作清單\n", indent);
+                return ([], actionDump);
             }
 
             List<IScriptAction> actions = [];
@@ -112,45 +115,50 @@ namespace ArkScriptEditor.Classes
                     case "Wait": // (time)
                         long time = (long)actionTable["time"];
                         actions.Add(new Action_Wait(time));
-                        Logger.Info(this, string.Format("{0}等待 {1} 毫秒", indent, time));
+                        actionDump += string.Format("{0}等待 {1} 毫秒\n", indent, time);
                         break;
-                    case "WaitColor": // (x, y, color)
+                    case "WaitColor": // (x, y, r, g, b)
                         long wait_x = (long)actionTable["x"];
                         long wait_y = (long)actionTable["y"];
                         long r = (long)actionTable["r"];
                         long g = (long)actionTable["g"];
                         long b = (long)actionTable["b"];
                         actions.Add(new Action_WaitColor(wait_x, wait_y, r, g, b));
-                        Logger.Info(this, string.Format("{0}等待直到 ({1}, {2}) 出現顏色 ({3}, {4}, {5})", indent, wait_x, wait_y, r, g, b));
+                        actionDump += string.Format("{0}等待直到 ({1}, {2}) 出現顏色 ({3}, {4}, {5})\n", indent, wait_x, wait_y, r, g, b);
                         break;
                     case "SetCursorPos": // (x, y)
                         long to_x = (long)actionTable["x"];
                         long to_y = (long)actionTable["y"];
                         actions.Add(new Action_SetCursorPos(to_x, to_y));
-                        Logger.Info(this, string.Format("{0}滑鼠移動到 ({1}, {2})", indent, to_x, to_y));
+                        actionDump += string.Format("{0}滑鼠移動到 ({1}, {2})\n", indent, to_x, to_y);
                         break;
                     case "LMBClick": // ()
                         actions.Add(new Action_LMBClick());
-                        Logger.Info(this, string.Format("{0}點一下左鍵", indent));
+                        actionDump += string.Format("{0}點一下左鍵\n", indent);
                         break;
                     case "PressKey": // (keys)
                         string keys = (string)actionTable["keys"];
                         actions.Add(new Action_PressKey(keys));
-                        Logger.Info(this, string.Format("{0}按下按鍵 {1}", indent, keys));
+                        actionDump += string.Format("{0}按下按鍵 {1}\n", indent, keys);
                         break;
                     case "Repeat": // (count, actions)
                         long count = (long)actionTable["count"];
-                        Logger.Info(this, string.Format("{0}重複執行 {1} 次:", indent, count));
+                        actionDump += string.Format("{0}重複執行 {1} 次:\n", indent, count);
+                        
                         object obj = actionTable["actions"];
-                        actions.Add(new Action_Repeat(count, ResolveActionTable(obj, depth + 1)));
+                        (var outActions, var outActionDump) = ResolveActionTable(obj, depth + 1);
+                        actions.Add(new Action_Repeat(count, outActions));
+                        actionDump += outActionDump;
                         break;
                     default:
+                        string s = string.Format("未處理的 action: {0} 請檢查腳本", type);
+                        actionDump += "!! " + s + Environment.NewLine;
                         string exceptionMessage = string.Format("未處理的 action: {0} 請檢查腳本", type);
                         Logger.Error(this, exceptionMessage);
                         break;
                 }
             }
-            return actions;
+            return (actions, actionDump);
         }
 
         private Lua? LoadLua(string scriptPath)

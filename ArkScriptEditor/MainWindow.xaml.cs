@@ -11,6 +11,8 @@ namespace ArkScriptEditor
 
         private static readonly List<Script> scripts = [];
 
+        private static readonly Dictionary<string, ScriptRunner> scriptRunners = [];
+
         public MainWindow()
         {
             InitializeComponent();
@@ -22,8 +24,11 @@ namespace ArkScriptEditor
 
             Text_ScriptInfo.Text = "";
             List_Script.SelectionChanged += List_Script_OnSelectionChanged;
-            Check_StartScript.Checked += Check_StartScript_Checked;
+            Check_StartScript.Checked += Check_StartScript_StateUpdated;
+            Check_StartScript.Unchecked += Check_StartScript_StateUpdated;
             Check_StartScript.IsEnabled = false;
+
+            TB_ActionViewer.Text = "選擇一個腳本";
 
             // log textbox
 
@@ -34,9 +39,6 @@ namespace ArkScriptEditor
             // initialize script tabs
 
             ScanScriptFiles();
-
-            // TODO: select first script as default if have
-
         }
 
         private void B_AddScript_Click(object sender, RoutedEventArgs e)
@@ -50,20 +52,39 @@ namespace ArkScriptEditor
             ScanScriptFiles();
         }
 
-        private void Check_StartScript_Checked(object sender, RoutedEventArgs e)
+        private void Check_StartScript_StateUpdated(object sender, RoutedEventArgs e)
         {
             CheckBox checkBox = (CheckBox)sender;
-            bool running = checkBox.IsChecked ?? false;
+
             Script? script = GetCurrentScript();
-            if (script != null)
+            if (script == null)
             {
-                script.State = running ? ScriptState.Running : ScriptState.Idle;
+                checkBox.IsChecked = false;
+                return;
             }
 
             // TODO: Change tab text color
 
-            // TODO: Run/Stop runner script
+            ScriptRunner? runner = GetCurrentScriptRunner();
+            if (runner == null)
+            {
+                checkBox.IsChecked = false;
+                return;
+            }
 
+            if (checkBox.IsChecked ?? false)
+            {
+                if (!runner.Start())
+                {
+                    checkBox.IsChecked = false;
+                }
+            }
+            else
+            {
+                runner.Stop();
+            }
+
+            Text_ScriptInfo.Text = script.ToString();
         }
 
         private void List_Script_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -72,14 +93,16 @@ namespace ArkScriptEditor
             if (script != null)
             {
                 Text_ScriptInfo.Text = script.ToString();
-
-                
-                List<IScriptAction> actions = scriptReader.LoadScriptActions(script.Path);
-                // TODO: Init runner with actions
+                TB_ActionViewer.Text = script.ActionDump;
+                Check_StartScript.IsEnabled = true;
+                Check_StartScript.IsChecked = script.State == ScriptState.Running;
             }
             else
             {
                 Text_ScriptInfo.Text = "";
+                TB_ActionViewer.Text = "選擇一個腳本";
+                Check_StartScript.IsEnabled = false;
+                Check_StartScript.IsChecked = false;
             }
         }
 
@@ -106,7 +129,11 @@ namespace ArkScriptEditor
                 Logger.Info(this, "Rescaning...");
                 scriptReader.Clear();
 
-                // TODO: Stop/Clear all running script
+                var runners = scriptRunners.Values;
+                foreach (var runner in runners)
+                {
+                    runner?.Dispose();
+                }
 
                 scripts.Clear();
             }
@@ -127,6 +154,7 @@ namespace ArkScriptEditor
                 {
                     desc = name;
                 }
+                var actions = scriptReader.LoadScriptActions(path, out string actionDump);
 
                 Script script = new Script
                 {
@@ -134,18 +162,16 @@ namespace ArkScriptEditor
                     Name = name,
                     Desc = desc,
                     State = ScriptState.Idle,
+                    Actions = actions,
+                    ActionDump = actionDump,
+                    ActionInterval = scriptReader.LoadScriptGlobalDelay(path),
                 };
                 scripts.Add(script);
+                scriptRunners[script.Name] = new ScriptRunner(script);
 
                 Logger.Info(this, string.Format("找到了腳本: {0} [{1}]", desc, name));
             }
             List_Script.ItemsSource = scripts;
-
-            if (scripts.Count > 0)
-            {
-                List_Script.SelectedItem = scripts[0];
-                Check_StartScript.IsEnabled = true;
-            }
         }
 
         private Script? GetCurrentScript()
@@ -156,6 +182,28 @@ namespace ArkScriptEditor
                 Logger.Warn(this, string.Format("GetCurrentScript when script is null. Selected: {0}", List_Script.SelectedItem));
             }
             return script;
+        }
+
+        private ScriptRunner? GetCurrentScriptRunner()
+        {
+            var script = GetCurrentScript();
+            if (script == null)
+            {
+                Logger.Warn(this, string.Format("在沒有腳本時試圖取得Runner"));
+                return null;
+            }
+
+            if (scriptRunners.TryGetValue(script.Name, out ScriptRunner? runner) && runner != null)
+            {
+                return runner;
+            }
+            else
+            {
+                Logger.Error(this, string.Format("腳本 {0} 的 runner 不存在", script.Name));
+                runner = new ScriptRunner(script);
+                scriptRunners[script.Name] = runner;
+                return runner;
+            }
         }
     }
 }

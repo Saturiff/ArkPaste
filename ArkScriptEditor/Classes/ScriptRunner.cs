@@ -1,112 +1,93 @@
-﻿using System.Drawing;
-using System.Runtime.InteropServices;
-using Point = System.Drawing.Point;
-using Timer = System.Windows.Forms.Timer;
+﻿using Timer = System.Windows.Forms.Timer;
 
 namespace ArkScriptEditor.Classes
 {
-    class ScriptRunner(nint arkHandle)
+    class ScriptRunner(Script script)
     {
-        public bool enableBlackSlotCheck = false;
+        public long DeltaMillisecond { get; private set; } = 0;
+        public nint HWnd { get; private set; } = 0;
 
-        public event EventHandler? FarmTimerTick;
+        private Timer? timer;
+        private int currentActionIndex;
 
-        public void Start(int interval = 50)
+        public bool Start()
         {
-            if (farmTimer == null)
+            if (script == null)
             {
-                farmTimer = new Timer();
-                farmTimer.Tick += OnTimerTick;
+                Logger.Error(this, "腳本執行失敗，ScriptRunner沒有被正確初始化");
+                return false;
             }
-            else
+
+            if (script.Actions == null)
             {
-                farmTimer.Interval = interval;
-                farmTimer.Start();
+                Logger.Error(this, "腳本未被正確初始化");
+                return false;
             }
+
+            if (script.Actions.Count == 0)
+            {
+                Logger.Warn(this, "這是一個空腳本，因此不會執行");
+                return false;
+            }
+
+            HWnd = ScriptLibrary.FindWindow(null, "ARK: Survival Evolved");
+            if (HWnd == 0)
+            {
+                Logger.Error(this, "腳本執行失敗，無法找到遊戲視窗 (ARK: Survival Evolved)");
+                return false;
+            }
+
+            if (timer == null)
+            {
+                timer = new Timer();
+                timer.Tick += OnTimerTick;
+                DeltaMillisecond = 0;
+                currentActionIndex = 0;
+            }
+
+            timer.Interval = script.ActionInterval;
+            timer.Start();
+            script.State = ScriptState.Running;
+
+            return true;
         }
 
         public void Stop()
         {
-            if (farmTimer == null)
-            {
-                return;
-            }
-            farmTimer.Stop();
+            timer?.Stop();
+            script.State = ScriptState.Idle;
+        }
+
+        public void Dispose()
+        {
+            Stop();
+            timer?.Dispose();
         }
 
         private void OnTimerTick(object? sender, EventArgs e)
         {
-            FarmTimerTick?.Invoke(sender, e);
-            return;
-        }
-
-        private static Color GetColorAt(Point location)
-        {
-            Bitmap p = new Bitmap(1, 1, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            using (Graphics gdest = Graphics.FromImage(p))
+            if (timer == null)
             {
-                using Graphics gsrc = Graphics.FromHwnd(nint.Zero);
-                nint hSrcDC = gsrc.GetHdc();
-                nint hDC = gdest.GetHdc();
-                int retval = BitBlt(hDC, 0, 0, 1, 1, hSrcDC, location.X, location.Y, (int)CopyPixelOperation.SourceCopy);
-                gdest.ReleaseHdc();
-                gsrc.ReleaseHdc();
+                Stop();
+                Logger.Error(this, "stop script: timer invalid");
+                return;
+            }
+            DeltaMillisecond += timer.Interval;
+
+            var actions = script.Actions ?? [];
+            if (currentActionIndex >= actions.Count)
+            {
+                Stop();
+                Logger.Warn(this, "stop script: index oob");
+                return;
             }
 
-            return p.GetPixel(0, 0);
+            if (actions[currentActionIndex].Execute(this))
+            {
+                currentActionIndex++;
+            }
+
+            return;
         }
-
-        private static bool IsItemDetected(Point location, Color c)
-        {
-            Color gotC = GetColorAt(location);
-            // 給予一點容錯值
-            return Math.Abs(gotC.R - c.R) < 5
-                    && Math.Abs(gotC.G - c.G) < 5
-                    && Math.Abs(gotC.B - c.B) < 5;
-        }
-
-        private void BringToFront(nint hWnd)
-        {
-            SetForegroundWindow(hWnd);
-        }
-
-        void LMBClick()
-        {
-            PostMessage(arkHandle, WM_LBUTTONDOWN, 1, 0);
-            PostMessage(arkHandle, WM_LBUTTONUP, 0, 0);
-        }
-
-        void LMBClickAt(ushort mouseX, ushort mouseY)
-        {
-            PostMessage(arkHandle, WM_LBUTTONDOWN, 1, MAKELPARAM(mouseX, mouseY));
-            PostMessage(arkHandle, WM_LBUTTONUP, 0, MAKELPARAM(mouseX, mouseY));
-        }
-
-        private static void Wait(int millisecondsTimeout)
-        {
-            Thread.Sleep(millisecondsTimeout);
-        }
-
-        private Timer? farmTimer;
-
-        private const int WM_LBUTTONDOWN = 0x0201;
-        private const int WM_LBUTTONUP = 0x0202;
-
-        private static int MAKELPARAM(int p, int p_2)
-        {
-            return p_2 << 16 | p & 0xFFFF;
-        }
-
-        [DllImport("user32")]
-        private static extern bool PostMessage(nint hWnd, uint Msg, int wParam, int lParam);
-
-        [DllImport("gdi32", SetLastError = true)]
-        private static extern int BitBlt(nint hDC, int x, int y, int nWidth, int nHeight, nint hSrcDC, int xSrc, int ySrc, int dwRop);
-
-        [DllImport("user32.dll")]
-        static extern bool SetCursorPos(int x, int y);
-
-        [DllImport("user32.dll")]
-        static extern bool SetForegroundWindow(nint hWnd);
     }
 }

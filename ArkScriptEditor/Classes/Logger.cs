@@ -2,7 +2,7 @@
 {
     internal static class Logger
     {
-        public static event EventHandler Log;
+        public static event EventHandler? Log;
 
         public static void Info(object ctx, string logStr)
         {
@@ -36,7 +36,7 @@
     class LoggerEventArgs : EventArgs
     {
         private string content;
-        
+
         public LoggerEventArgs(string content)
         {
             this.content = content;
