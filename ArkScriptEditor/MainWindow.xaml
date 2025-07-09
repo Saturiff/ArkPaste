@@ -25,7 +25,7 @@
                 </WrapPanel>
             </WrapPanel>
         </GroupBox>
-        <Button Name="B_AddScript" Content="新增 Lua Script" HorizontalAlignment="Left" Margin="6,8,0,0" Padding="8,3" VerticalAlignment="Top" Foreground="White" Background="Transparent" BorderBrush="White"/>
+        <Button Name="B_AddScript" Content="如何新增 Script" HorizontalAlignment="Left" Margin="6,8,0,0" Padding="8,3" VerticalAlignment="Top" Foreground="White" Background="Transparent" BorderBrush="White"/>
         <Button Name="B_RefreshScript" Content="重新整理" HorizontalAlignment="Left" Margin="113,8,0,0" Padding="8,3" VerticalAlignment="Top" Foreground="White" Background="Transparent" BorderBrush="White"/>
     </Grid>
 </Window>

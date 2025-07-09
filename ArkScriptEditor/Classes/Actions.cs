@@ -55,7 +55,6 @@ namespace ArkScriptEditor.Classes
         }
     }
 
-
     internal class Action_LMBClick() : IScriptAction
     {
         public bool Execute(ScriptRunner ctx)

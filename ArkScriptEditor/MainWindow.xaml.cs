@@ -44,7 +44,9 @@ namespace ArkScriptEditor
 
         private void B_AddScript_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Logger.Info(this, "複製本地的 Script\\template.lua 文件用來製作自己的腳本，若已經遺失請至下方連結索取");
+            Logger.Info(this, "線上腳本範本連結:");
+            Logger.Info(this, "    https://github.com/Saturiff/ArkPaste/blob/master/ArkScriptEditor/Script/template.lua");
         }
 
         private void B_RefreshScript_Click(object sender, RoutedEventArgs e)
@@ -138,7 +140,7 @@ namespace ArkScriptEditor
 
                 scripts.Clear();
             }
-
+            
             string scriptDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Script");
             string[] filePaths = Directory.GetFiles(scriptDir, "*.lua");
             foreach (string path in filePaths)
