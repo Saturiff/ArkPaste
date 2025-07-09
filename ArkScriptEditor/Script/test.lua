@@ -13,8 +13,9 @@ Description = "test 開發測試"
 ---@type boolean 是否隱藏
 Hide = false
 
----@type integer 動作全局間隔，最低20
-GlobalDelay = 100
+---@type integer 動作全局間隔，最少 1 毫秒
+-- 16 毫秒接近 60 FPS 的表現(1/60)，32 毫秒接近 30 FPS 的表現(1/30)
+GlobalDelay = 16
 
 --[[
     腳本本體:
@@ -23,7 +24,7 @@ GlobalDelay = 100
 function Run()
     H.data = {}
     -- 在這個方法內新增你的腳本動作
-    
+
     H:WaitColor(882, 146, 128, 231, 255)
     H:SetCursorPos(1069, 192)
     H:LMBClick()
@@ -33,7 +34,6 @@ function Run()
     H:LMBClick()
     H:Repeat(10, function()
         H:PressKey("A")
-        -- H:Wait(50)
     end)
 
     H:PressKey("F")

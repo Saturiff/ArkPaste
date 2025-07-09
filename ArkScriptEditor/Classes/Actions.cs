@@ -149,6 +149,5 @@ namespace ArkScriptEditor.Classes
     interface IScriptAction
     {
         bool Execute(ScriptRunner ctx);
-        void Reset() { }
     }
 }

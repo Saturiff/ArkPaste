@@ -46,13 +46,13 @@ namespace ArkScriptEditor.Classes
             Lua? lua = LoadLua(scriptPath);
             if (lua == null)
             {
-                Logger.Error(this, "無法讀取全局延遲 (腳本異常)");
-                return 50;
+                Logger.Error(this, "無法讀取全局延遲 (腳本異常)，使用預設的 16 毫秒");
+                return 16;
             }
 
             double value = (double)lua["GlobalDelay"];
 
-            return Math.Clamp((int)value, 50, (int)value);
+            return Math.Max((int)value, 1);
         }
 
         public bool LoadScriptHide(string scriptPath)

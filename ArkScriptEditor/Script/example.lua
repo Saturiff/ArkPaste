@@ -13,8 +13,9 @@ Description = "替換成你的描述"
 ---@type boolean 是否隱藏
 Hide = false
 
----@type integer 動作全局間隔，最低20
-GlobalDelay = 50
+---@type integer 動作全局間隔，最少 1 毫秒
+-- 16 毫秒接近 60 FPS 的表現(1/60)，32 毫秒接近 30 FPS 的表現(1/30)
+GlobalDelay = 16
 
 --[[
     腳本本體:

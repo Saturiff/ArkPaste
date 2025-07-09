@@ -18,7 +18,7 @@ namespace ArkScriptEditor.Classes
         }
         public required List<IScriptAction> Actions { get; set; }
         public required string ActionDump { get; set; }
-        public int ActionInterval { get; set; } = 50;
+        public int ActionInterval { get; set; } = 16;
 
 
         public event PropertyChangedEventHandler? PropertyChanged;
