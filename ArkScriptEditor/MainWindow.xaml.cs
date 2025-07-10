@@ -66,8 +66,6 @@ namespace ArkScriptEditor
                 return;
             }
 
-            // TODO: Change tab text color
-
             ScriptRunner? runner = GetCurrentScriptRunner();
             if (runner == null)
             {
