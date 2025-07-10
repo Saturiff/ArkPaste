@@ -5,27 +5,132 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ArkScriptEditor"
         mc:Ignorable="d"
-        Title="ShuiNi" Height="442" Width="641" ShowInTaskbar="False" Background="#FF63627A" Topmost="True" ResizeMode="CanMinimize">
-    <Grid>
-        <TextBox Name="TB_Log" TextWrapping="Wrap" Text="TextBox" Margin="5,321,5,5" Foreground="White" Background="Transparent" BorderBrush="White"/>
-        <ListView Name="List_Script" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="5,41,461,114" Foreground="White" Background="Transparent" BorderBrush="White" SelectionMode="Single">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="描述/名稱" DisplayMemberBinding="{Binding Desc}"/>
-                    <GridViewColumn Header="執行中" DisplayMemberBinding="{Binding State}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <TextBox x:Name="TB_ActionViewer" TextWrapping="Wrap" Text="TextBox" Margin="190,126,7,115" Foreground="White" Background="Transparent" BorderBrush="White"/>
-        <GroupBox Header="Script Infomation" Margin="190,-1,8,312" Foreground="White">
-            <WrapPanel Orientation="Horizontal">
-                <TextBlock Name="Text_ScriptInfo" HorizontalAlignment="Left" TextWrapping="Wrap" Text="TextBlock" Height="84" Width="345"/>
-                <WrapPanel Orientation="Vertical" Height="16">
-                    <CheckBox Name="Check_StartScript" Content="執行工作" Foreground="White"/>
-                </WrapPanel>
-            </WrapPanel>
-        </GroupBox>
-        <Button Name="B_AddScript" Content="如何新增 Script" HorizontalAlignment="Left" Margin="6,8,0,0" Padding="8,3" VerticalAlignment="Top" Foreground="White" Background="Transparent" BorderBrush="White"/>
-        <Button Name="B_RefreshScript" Content="重新整理" HorizontalAlignment="Left" Margin="113,8,0,0" Padding="8,3" VerticalAlignment="Top" Foreground="White" Background="Transparent" BorderBrush="White"/>
+        Title="ShuiNi" Height="440" Width="640" ShowInTaskbar="False" Background="#FF63627A" Topmost="True" ResizeMode="CanResizeWithGrip">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="150"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <!-- Lua script tabs -->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Control buttons -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Button Name="B_AddScript" Content="如何新增 Script" HorizontalAlignment="Left" Padding="8,3" VerticalAlignment="Center" Foreground="White" Background="Transparent" BorderBrush="White"/>
+                <Button Name="B_RefreshScript" Content="重新整理" HorizontalAlignment="Right" Padding="8,3" VerticalAlignment="Center" Foreground="White" Background="Transparent" BorderBrush="White" Grid.Column="1"/>
+            </Grid>
+            <!-- Script list -->
+            <ListView Name="List_Script" d:ItemsSource="{d:SampleData ItemCount=5}" Foreground="White" Background="Transparent" BorderBrush="White" SelectionMode="Single" Padding="-2" Grid.Row="2">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="FontWeight" Value="Normal"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding State}" Value="Idle">
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="FontWeight" Value="Normal" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State}" Value="Running">
+                                <Setter Property="Foreground" Value="LightGreen" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.View>
+                    <GridView>
+                        <GridView.ColumnHeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                            </Style>
+                        </GridView.ColumnHeaderContainerStyle>
+                        <GridViewColumn Header="描述/名稱" DisplayMemberBinding="{Binding Desc}"/>
+                        <GridViewColumn Header="執行中" DisplayMemberBinding="{Binding State}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+        
+        <!-- Lua script tabs -->
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Script infomation -->
+            <GroupBox Header="Lua Script Infomation" Foreground="White" FontWeight="Bold">
+                <Grid Margin="3,3,3,3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Name="Text_ScriptInfo" TextWrapping="Wrap" Text="TextBlock"/>
+                    <CheckBox Name="Check_StartScript" Content="執行工作" Foreground="White" Grid.Column="1" Margin="20,0,20,0" VerticalAlignment="Center"/>
+                </Grid>
+            </GroupBox>
+            <!-- Action list -->
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Text="動作清單" Foreground="White" FontWeight="Bold"/>
+                <TextBox x:Name="TB_ActionViewer" TextWrapping="Wrap" Text="Action" Foreground="White" Background="Transparent" BorderBrush="White" Grid.Row="1"/>
+            </Grid>
+        </Grid>
+
+        <GridSplitter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Height="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="#FF7A798C"/>
+        
+        <!-- Log -->
+        <Grid Grid.Row="2" Grid.ColumnSpan="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Text="日誌" Foreground="White" FontWeight="Bold" Margin="0,0,0,3"/>
+            <TextBox Name="TB_Log" TextWrapping="Wrap" Text="Log" Foreground="White" Background="Transparent" BorderBrush="White" Padding="5,5,5,5" Grid.Row="1"/>
+        </Grid>
     </Grid>
 </Window>
