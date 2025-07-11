@@ -10,8 +10,9 @@ namespace ArkScriptEditor.Classes
         public static Color GetColorAt(Point location)
         {
             Bitmap p = new Bitmap(1, 1, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            using (Graphics gdest = Graphics.FromImage(p))
+            try
             {
+                using Graphics gdest = Graphics.FromImage(p);
                 using Graphics gsrc = Graphics.FromHwnd(nint.Zero);
                 nint hSrcDC = gsrc.GetHdc();
                 nint hDC = gdest.GetHdc();
@@ -19,17 +20,23 @@ namespace ArkScriptEditor.Classes
                 gdest.ReleaseHdc();
                 gsrc.ReleaseHdc();
             }
+            catch
+            {
+                Logger.Error("GetColorAt", "獲取顏色時發生了問題");
+                throw;
+            }
 
             return p.GetPixel(0, 0);
         }
 
         public static bool IsColorAt(Point location, Color c, int bias = 5)
         {
-            Color gotC = GetColorAt(location);
+            Color _c = GetColorAt(location);
+
             // 給予一點容錯值
-            return Math.Abs(gotC.R - c.R) < bias
-                && Math.Abs(gotC.G - c.G) < bias
-                && Math.Abs(gotC.B - c.B) < bias;
+            return Math.Abs(_c.R - c.R) < bias
+                && Math.Abs(_c.G - c.G) < bias
+                && Math.Abs(_c.B - c.B) < bias;
         }
 
         public static void PressKey(nint hWnd, Keys key)

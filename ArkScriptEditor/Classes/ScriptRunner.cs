@@ -80,12 +80,21 @@ namespace ArkScriptEditor.Classes
                 currentActionIndex = 0;
             }
 
-            if (actions[currentActionIndex].Execute(this))
+            try
             {
-                currentActionIndex++;
+                if (actions[currentActionIndex].Execute(this))
+                {
+                    currentActionIndex++;
+                }
             }
-
-            return;
+            catch (Exception ex)
+            {
+                Stop();
+                Logger.Error(this, "遇上了例外狀況，腳本已停止執行");
+                Logger.Error(this, string.Format("訊息:\n    {0}", ex));
+                Logger.Error(this, string.Format("堆疊:\n{0}", ex.StackTrace));
+                return;
+            }
         }
     }
 }
