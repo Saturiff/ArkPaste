@@ -3,11 +3,9 @@ using ArkScriptEditor.Properties;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
 using Button = System.Windows.Controls.Button;
 using CheckBox = System.Windows.Controls.CheckBox;
@@ -24,6 +22,12 @@ namespace ArkScriptEditor
         private static readonly ObservableCollection<LogItem> logItems = [];
 
         private static readonly Dictionary<string, ScriptRunner> scriptRunners = [];
+
+        enum HotKeyID
+        {
+            ToggleCurrent = 1000,
+            StopAll = 1001,
+        }
 
         public MainWindow()
         {
@@ -58,6 +62,37 @@ namespace ArkScriptEditor
             ScanScriptFiles();
         }
 
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+
+
+            HotKeySetting[] hotkeyData = [
+                    new HotKeySetting {
+                    ID = (int)HotKeyID.ToggleCurrent,
+                    DefaultKey = Key.F7,
+                    HotKeyBindedCallback = OnHotKeyBinded_ToggleCurrent,
+                    HotKeyPressedCallback = OnHotKeyPessed_ToggleCurrent,
+                    SettingGet = () => (Key)Settings.Default.HotKey_ToggleCurrent,
+                },
+                new HotKeySetting {
+                    ID = (int)HotKeyID.StopAll,
+                    DefaultKey = Key.F8,
+                    HotKeyBindedCallback = OnHotKeyBinded_StopAll,
+                    HotKeyPressedCallback = OnHotKeyPessed_StopAll,
+                    SettingGet = () => (Key)Settings.Default.HotKey_StopAll,
+                },
+            ];
+            HotKey.Initialize(this, hotkeyData);
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            HotKey.Dispose();
+
+            base.OnClosed(e);
+        }
+
         private void LogItems_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (VisualTreeHelper.GetChildrenCount(List_Log) > 0)
@@ -68,181 +103,48 @@ namespace ArkScriptEditor
             }
         }
 
-        // Global hot key hook in Windows
-        // https://stackoverflow.com/a/76865142
-        // https://blog.magnusmontin.net/2015/03/31/implementing-global-hot-keys-in-wpf/
-
-        enum HotKeyID
+        private void OnHotKeyBinded_ToggleCurrent(Key newKey)
         {
-            ToggleCurrent = 1000,
-            StopAll = 1001,
+            Settings.Default.HotKey_ToggleCurrent = (int)newKey;
+            Settings.Default.Save();
+            Text_ToggleCurrentKeyHint.Text = newKey.ToString();
         }
 
-        private DateTime hotKeyLastTriggerTime = DateTime.MinValue;
-
-        // Modifiers:
-        private const uint MOD_NONE = 0x0000;
-
-        private IntPtr _windowHandle;
-        private HwndSource _source;
-        protected override void OnSourceInitialized(EventArgs e)
+        private void OnHotKeyBinded_StopAll(Key newKey)
         {
-            base.OnSourceInitialized(e);
-
-            SetHotKey(HotKeyID.ToggleCurrent);
-            SetHotKey(HotKeyID.StopAll);
+            Settings.Default.HotKey_StopAll = (int)newKey;
+            Settings.Default.Save();
+            Text_StopAllKeyHint.Text = newKey.ToString();
         }
 
-        protected override void OnClosed(EventArgs e)
+        private void OnHotKeyPessed_ToggleCurrent()
         {
-            _source.RemoveHook(HwndHook);
-            ScriptLibrary.UnregisterHotKey(_windowHandle, (int)HotKeyID.ToggleCurrent);
-            ScriptLibrary.UnregisterHotKey(_windowHandle, (int)HotKeyID.StopAll);
-            base.OnClosed(e);
-        }
-
-        private void SetHotKey(HotKeyID hotKeyID, Key? newKey = null)
-        {
-            int iHotKeyID = (int)hotKeyID;
-
-            // Check default
-
-            switch (hotKeyID)
-            {
-                case HotKeyID.ToggleCurrent:
-                    newKey ??= Key.F7;
-                    break;
-                case HotKeyID.StopAll:
-                    newKey ??= Key.F8;
-                    break;
-                default:
-                    Logger.Info("HotKey", string.Format("InitializeHotKey: 未實現的 HotKeyID ({0})", hotKeyID));
-                    return;
-            }
-
-            // Check same
-
-            int iNewKey = (int)newKey;
-
-            int[] bindedKeys = [
-                Settings.Default.HotKey_ToggleCurrent,
-                Settings.Default.HotKey_StopAll,
-            ];
-            if (bindedKeys.Contains(iNewKey))
+            if (EditingHotKey != null)
             {
                 Logger.Warn("HotKey", "綁定失敗，熱鍵已被綁定在其他地方");
                 return;
             }
 
-            // Is re-initialize check
-
-            if (_source != null)
+            Logger.Info(this, "切換當前腳本的狀態");
+            if (List_Script.SelectedItem != null)
             {
-                ScriptLibrary.UnregisterHotKey(_windowHandle, iHotKeyID);
-            }
-            else
-            {
-                _windowHandle = new WindowInteropHelper(this).Handle;
-                _source = HwndSource.FromHwnd(_windowHandle);
-                _source.AddHook(HwndHook);
-            }
-
-            // Register key
-
-            uint vk = (uint)KeyInterop.VirtualKeyFromKey(newKey.Value);
-            bool success = ScriptLibrary.RegisterHotKey(_windowHandle, iHotKeyID, MOD_NONE, vk);
-            if (success)
-            {
-                Logger.Info("HotKey", string.Format("全局熱鍵掛勾成功: {0} (id={1})", hotKeyID, iHotKeyID));
-                switch (hotKeyID)
-                {
-                    case HotKeyID.ToggleCurrent:
-                        Settings.Default.HotKey_ToggleCurrent = iNewKey;
-                        Text_ToggleCurrentKeyHint.Text = newKey.ToString();
-                        Settings.Default.Save();
-                        break;
-                    case HotKeyID.StopAll:
-                        Settings.Default.HotKey_StopAll = iNewKey;
-                        Text_StopAllKeyHint.Text = newKey.ToString();
-                        Settings.Default.Save();
-                        break;
-                    default:
-                        Logger.Error("HotKey", string.Format("InitializeHotKey: 未實現的 HotKeyID ({0})", hotKeyID));
-                        return;
-                }
-            }
-            else
-            {
-                Logger.Error("HotKey", string.Format("全局熱鍵掛勾失敗，目標快捷鍵可能已經被其他軟體註冊 (last_err={0})", Marshal.GetLastWin32Error()));
+                Check_StartScript.IsChecked = !Check_StartScript.IsChecked;
             }
         }
 
-        private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        private void OnHotKeyPessed_StopAll()
         {
-            const int WM_HOTKEY = 0x0312;
-            switch (msg)
+            if (EditingHotKey != null)
             {
-                case WM_HOTKEY:
-                    var now = DateTime.Now;
-                    // 0.3 Cooldown
-                    if ((now - hotKeyLastTriggerTime).TotalSeconds < 0.3)
-                    {
-                        break;
-                    }
-                    hotKeyLastTriggerTime = now;
-
-                    int vkey = ((int)lParam >> 16) & 0xFFFF;
-                    int iKey = (int)KeyInterop.KeyFromVirtualKey(vkey);
-                    switch (wParam.ToInt32())
-                    {
-                        case (int)HotKeyID.ToggleCurrent:
-                            if (iKey == Settings.Default.HotKey_ToggleCurrent)
-                            {
-                                if (EditingHotKey != null)
-                                {
-                                    Logger.Warn("HotKey", "綁定失敗，熱鍵已被綁定在其他地方");
-                                    break;
-                                }
-
-                                OnHotKeyEvent_ToggleCurrent();
-                            }
-                            handled = true;
-                            break;
-                        case (int)HotKeyID.StopAll:
-                            if (iKey == Settings.Default.HotKey_StopAll)
-                            {
-                                if (EditingHotKey != null)
-                                {
-                                    Logger.Warn("HotKey", "綁定失敗，熱鍵已被綁定在其他地方");
-                                    break;
-                                }
-
-                                OnHotKeyEvent_StopAll();
-                            }
-                            handled = true;
-                            break;
-                    }
-                    break;
+                Logger.Warn("HotKey", "綁定失敗，熱鍵已被綁定在其他地方");
+                return;
             }
-            return IntPtr.Zero;
-        }
 
-        private void OnHotKeyEvent_StopAll()
-        {
             Logger.Info(this, "停下全部腳本");
             var runners = scriptRunners.Values;
             foreach (var runner in runners)
             {
                 runner?.Stop();
-            }
-        }
-
-        private void OnHotKeyEvent_ToggleCurrent()
-        {
-            Logger.Info(this, "切換當前腳本的狀態");
-            if (List_Script.SelectedItem != null)
-            {
-                Check_StartScript.IsChecked = !Check_StartScript.IsChecked;
             }
         }
 
@@ -453,11 +355,11 @@ namespace ArkScriptEditor
 
             if (sender == B_EditKey_ToggleCurrent)
             {
-                SetHotKey(HotKeyID.ToggleCurrent, key);
+                HotKey.SetHotKey((int)HotKeyID.ToggleCurrent, key);
             }
             else if (sender == B_EditKey_StopAll)
             {
-                SetHotKey(HotKeyID.StopAll, key);
+                HotKey.SetHotKey((int)HotKeyID.StopAll, key);
             }
             else
             {
