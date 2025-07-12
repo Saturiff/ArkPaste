@@ -24,15 +24,31 @@ GlobalDelay = 16
 function Run()
     H.data = {}
     -- 在這個方法內新增你的腳本動作
+
+    -- 等待 500 毫秒 (0.5秒)
     H:Wait(500)
+
+    -- 持續等待，直到座標(800, 600)出現顏色(255, 128, 0)
     H:WaitColor(800, 600, 255, 128, 0)
+
+    -- 滑鼠移動到座標(800, 600)
     H:SetCursorPos(800, 600)
+
+    -- 按下滑鼠左鍵
     H:LMBClick()
+
+    -- 按下按鍵 F
     H:PressKey("F")
+
+    -- 連續按下按鍵 A, D, V
     H:PressKey("ADV")
 
+    -- 內部動作重複執行 10 次
     H:Repeat(10, function()
+        -- 按下按鍵 A
         H:PressKey("A")
+
+        -- 等待 500 毫秒 (0.5秒)
         H:Wait(500)
     end)
 
