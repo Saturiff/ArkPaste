@@ -78,5 +78,11 @@ namespace ArkScriptEditor.Classes
 
         [DllImport("user32.dll")]
         private static extern bool SetForegroundWindow(nint hWnd);
+
+        [DllImport("user32.dll")]
+        public static extern bool RegisterHotKey(nint hWnd, int id, uint fsModifiers, uint vk);
+
+        [DllImport("user32.dll")]
+        public static extern bool UnregisterHotKey(nint hWnd, int id);
     }
 }

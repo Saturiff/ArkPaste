@@ -11,10 +11,34 @@
         <Style x:Key="ArkStyle_Button" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border CornerRadius="3" Background="{TemplateBinding Background}" BorderBrush="White" BorderThickness="1" Padding="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#7474A8"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#555585"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <!-- Button (Icon) style -->
+        <Style x:Key="ArkStyle_IconButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" Padding="1">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
                     </ControlTemplate>
@@ -60,7 +84,7 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    <Grid>
+    <Grid Name="Grid_Main" Focusable="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="5"/>
@@ -151,11 +175,73 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="120"/>
                     </Grid.ColumnDefinitions>
                     
-                    <TextBlock Name="Text_ScriptInfo" TextWrapping="Wrap" Text="TextBlock"/>
-                    <CheckBox Name="Check_StartScript" Content="執行工作" Foreground="White" Grid.Column="1" Margin="20,0,20,0" VerticalAlignment="Center"/>
+                    <TextBlock Name="Text_ScriptInfo" TextWrapping="Wrap" Text="Script information"/>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="20"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <CheckBox Name="Check_StartScript" Content="執行工作" Foreground="White" Grid.Column="1" Margin="20,0,20,0" VerticalAlignment="Center"/>
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock TextWrapping="Wrap" Text="切換執行: " VerticalAlignment="Center"/>
+                            <TextBlock Name="Text_ToggleCurrentKeyHint" TextWrapping="Wrap" Text="" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsFocused, ElementName=B_EditKey_ToggleCurrent}" Value="True">
+                                                <Setter Property="Foreground" Value="Green"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <Button Name="B_EditKey_ToggleCurrent" Content="⚙️" Style="{StaticResource ArkStyle_IconButton}" Grid.Column="2" VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock TextWrapping="Wrap" Text="全部停止: " VerticalAlignment="Center"/>
+                            <TextBlock Name="Text_StopAllKeyHint" TextWrapping="Wrap" Text="" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsFocused, ElementName=B_EditKey_StopAll}" Value="True">
+                                                <Setter Property="Foreground" Value="Green"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <Button Name="B_EditKey_StopAll" Content="⚙️" Style="{StaticResource ArkStyle_IconButton}" Grid.Column="2" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </GroupBox>
             <!-- Action list -->
