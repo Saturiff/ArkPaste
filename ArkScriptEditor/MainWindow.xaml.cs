@@ -1,12 +1,14 @@
 ﻿using ArkScriptEditor.Classes;
 using ArkScriptEditor.Properties;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
 using Button = System.Windows.Controls.Button;
 using CheckBox = System.Windows.Controls.CheckBox;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
@@ -18,6 +20,8 @@ namespace ArkScriptEditor
         private static readonly LuaScriptReader scriptReader = new LuaScriptReader();
 
         private static readonly ObservableCollection<Script> scripts = [];
+
+        private static readonly ObservableCollection<LogItem> logItems = [];
 
         private static readonly Dictionary<string, ScriptRunner> scriptRunners = [];
 
@@ -43,13 +47,25 @@ namespace ArkScriptEditor
 
             // log textbox
 
-            TB_Log.Clear();
+            List_Log.ItemsSource = logItems;
+            logItems.CollectionChanged += LogItems_CollectionChanged;
             Logger.Log += Logger_OnLog;
             Logger.Info(this, "Logger ready");
 
             // initialize script tabs
 
+            List_Script.ItemsSource = scripts;
             ScanScriptFiles();
+        }
+
+        private void LogItems_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (VisualTreeHelper.GetChildrenCount(List_Log) > 0)
+            {
+                Border border = (Border)VisualTreeHelper.GetChild(List_Log, 0);
+                ScrollViewer scrollViewer = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
+                scrollViewer.ScrollToBottom();
+            }
         }
 
         // Global hot key hook in Windows
@@ -287,15 +303,9 @@ namespace ArkScriptEditor
         {
             Dispatcher.Invoke(() =>
             {
-                string senderStr = "Unknow";
-                if (sender != null)
-                {
-                    string[] senderPath = sender.ToString().Split('.');
-                    senderStr = senderPath[^1];
-                }
-
-                TB_Log.Text += string.Format("[{0}] {1}\n", senderStr, ((LoggerEventArgs)e).ToString());
-                TB_Log.ScrollToEnd();
+                LoggerEventArgs args = ((LoggerEventArgs)e);
+                var item = args.GetLogItem();
+                logItems.Add(item);
             });
         }
 
@@ -348,7 +358,6 @@ namespace ArkScriptEditor
 
                 Logger.Info(this, string.Format("找到了腳本: {0} [{1}]", desc, name));
             }
-            List_Script.ItemsSource = scripts;
         }
 
         private Script? GetCurrentScript()

@@ -272,7 +272,30 @@
             </Grid.ColumnDefinitions>
             
             <TextBlock Text="日誌" Foreground="White" FontWeight="Bold" Margin="0,0,0,3"/>
-            <TextBox Name="TB_Log" TextWrapping="Wrap" Text="Log" Foreground="White" Background="#5f000000" BorderBrush="Transparent" Padding="5" Grid.Row="1"/>
+            <ListBox Name="List_Log" Grid.Row="1" Background="#5f000000" BorderThickness="0" Padding="5 2">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Message}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Level}" Value="Info">
+                                            <Setter Property="Foreground" Value="White"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Level}" Value="Warn">
+                                            <Setter Property="Foreground" Value="Orange"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Level}" Value="Error">
+                                            <Setter Property="Foreground" Value="Red"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Grid>
     </Grid>
 </Window>

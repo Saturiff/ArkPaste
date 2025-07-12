@@ -6,24 +6,31 @@
 
         public static void Info(object ctx, string logStr)
         {
-            LogImpl(ctx, string.Format("資訊: {0}", logStr));
+            LogImpl(LogLevel.Info, ctx, logStr);
         }
 
         public static void Warn(object ctx, string logStr)
         {
-            LogImpl(ctx, string.Format("警告: {0}", logStr));
+            LogImpl(LogLevel.Warn, ctx, logStr);
         }
 
         public static void Error(object ctx, string logStr)
         {
-            LogImpl(ctx, string.Format("錯誤: {0}", logStr));
+            LogImpl(LogLevel.Error, ctx, logStr);
         }
 
-        private static void LogImpl(object ctx, string content)
+        private static void LogImpl(LogLevel level, object ctx, string logStr)
         {
-            Console.WriteLine(content);
+            LogItem logItem = new LogItem()
+            {
+                Level = level,
+                Ctx = ctx,
+                Message = logStr,
+            };
 
-            LoggerEventArgs args = new LoggerEventArgs(content);
+            Console.WriteLine(logItem.ToString());
+
+            LoggerEventArgs args = new LoggerEventArgs(logItem);
             OnLog(ctx, args);
         }
 
@@ -33,18 +40,13 @@
         }
     }
 
-    class LoggerEventArgs : EventArgs
+    class LoggerEventArgs(LogItem logItem) : EventArgs
     {
-        private string content;
+        private readonly LogItem logItem = logItem;
 
-        public LoggerEventArgs(string content)
+        public LogItem GetLogItem()
         {
-            this.content = content;
-        }
-
-        public string ToString()
-        {
-            return content;
+            return logItem;
         }
     }
 }
