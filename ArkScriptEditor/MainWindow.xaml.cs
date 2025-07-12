@@ -153,16 +153,18 @@ namespace ArkScriptEditor
             bool success = ScriptLibrary.RegisterHotKey(_windowHandle, iHotKeyID, MOD_NONE, vk);
             if (success)
             {
-                Logger.Info("HotKey", string.Format("全局熱鍵掛勾成功: {0} (id={1})", hotKeyID.ToString(), iHotKeyID));
+                Logger.Info("HotKey", string.Format("全局熱鍵掛勾成功: {0} (id={1})", hotKeyID, iHotKeyID));
                 switch (hotKeyID)
                 {
                     case HotKeyID.ToggleCurrent:
                         Settings.Default.HotKey_ToggleCurrent = iNewKey;
                         Text_ToggleCurrentKeyHint.Text = newKey.ToString();
+                        Settings.Default.Save();
                         break;
                     case HotKeyID.StopAll:
                         Settings.Default.HotKey_StopAll = iNewKey;
                         Text_StopAllKeyHint.Text = newKey.ToString();
+                        Settings.Default.Save();
                         break;
                     default:
                         Logger.Error("HotKey", string.Format("InitializeHotKey: 未實現的 HotKeyID ({0})", hotKeyID));
@@ -422,19 +424,40 @@ namespace ArkScriptEditor
 
         private void B_EditKey_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
+            Logger.Info(this, string.Format("嘗試將切換執行綁定到快捷鍵: {0} ({1})", e.Key, (int)e.Key));
+
+            Key key = e.Key;
+
+            switch (key)
             {
-                EndKeyBinding();
-                return;
+                case Key.Escape:
+                    EndKeyBinding();
+                    return;
+
+                case Key.System:
+                    if (e.SystemKey == Key.F10)
+                    {
+                        key = Key.F10;
+                        e.Handled = true;
+                    }
+                    else
+                    {
+                        Logger.Warn(this, string.Format("不支援的系統鍵: {0} ({1})", e.SystemKey, (int)e.SystemKey));
+                        return;
+                    }
+                    break;
+
+                default:
+                    break;
             }
 
             if (sender == B_EditKey_ToggleCurrent)
             {
-                SetHotKey(HotKeyID.ToggleCurrent, e.Key);
+                SetHotKey(HotKeyID.ToggleCurrent, key);
             }
             else if (sender == B_EditKey_StopAll)
             {
-                SetHotKey(HotKeyID.StopAll, e.Key);
+                SetHotKey(HotKeyID.StopAll, key);
             }
             else
             {
