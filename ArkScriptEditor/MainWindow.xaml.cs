@@ -202,11 +202,7 @@ namespace ArkScriptEditor
                                     break;
                                 }
 
-                                Logger.Info(this, "切換當前腳本的狀態");
-                                if (List_Script.SelectedItem != null)
-                                {
-                                    Check_StartScript.IsChecked = !Check_StartScript.IsChecked;
-                                }
+                                OnHotKeyEvent_ToggleCurrent();
                             }
                             handled = true;
                             break;
@@ -219,12 +215,7 @@ namespace ArkScriptEditor
                                     break;
                                 }
 
-                                Logger.Info(this, "停下全部腳本");
-                                var runners = scriptRunners.Values;
-                                foreach (var runner in runners)
-                                {
-                                    runner?.Stop();
-                                }
+                                OnHotKeyEvent_StopAll();
                             }
                             handled = true;
                             break;
@@ -232,6 +223,25 @@ namespace ArkScriptEditor
                     break;
             }
             return IntPtr.Zero;
+        }
+
+        private void OnHotKeyEvent_StopAll()
+        {
+            Logger.Info(this, "停下全部腳本");
+            var runners = scriptRunners.Values;
+            foreach (var runner in runners)
+            {
+                runner?.Stop();
+            }
+        }
+
+        private void OnHotKeyEvent_ToggleCurrent()
+        {
+            Logger.Info(this, "切換當前腳本的狀態");
+            if (List_Script.SelectedItem != null)
+            {
+                Check_StartScript.IsChecked = !Check_StartScript.IsChecked;
+            }
         }
 
         private void B_AddScript_Click(object sender, RoutedEventArgs e)
