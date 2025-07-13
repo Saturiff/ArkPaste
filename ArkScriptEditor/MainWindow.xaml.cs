@@ -61,6 +61,10 @@ namespace ArkScriptEditor
             // initialize script tabs
 
             List_Script.ItemsSource = scripts;
+
+            // script categorization
+            // https://blog.csdn.net/DahlinSky/article/details/108636050
+
             CollectionView scriptListView = (CollectionView)CollectionViewSource.GetDefaultView(List_Script.ItemsSource);
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("Category");
             scriptListView.GroupDescriptions.Add(groupDescription);
@@ -426,6 +430,18 @@ namespace ArkScriptEditor
                 EditingHotKey = null;
             }
             Grid_Main.Focus();
+        }
+
+        private void B_CopyLog_Click(object sender, RoutedEventArgs e)
+        {
+            string logStr = "";
+
+            foreach (LogItem logItem in logItems)
+            {
+                logStr += logItem.ToString() + Environment.NewLine;
+            }
+
+            Clipboard.SetText(logStr);
         }
     }
 }

@@ -95,7 +95,7 @@
             <ColumnDefinition Width="3"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        
+
         <!-- Lua script tabs -->
         <Grid Margin="10">
             <Grid.RowDefinitions>
@@ -106,7 +106,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            
+
             <!-- Control buttons -->
             <Grid>
                 <Grid.RowDefinitions>
@@ -197,7 +197,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="120"/>
                     </Grid.ColumnDefinitions>
-                    
+
                     <TextBlock Name="Text_ScriptInfo" TextWrapping="Wrap" Text="Script information"/>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
@@ -273,26 +273,38 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <TextBlock Text="動作清單" Foreground="White" FontWeight="Bold"/>
                 <TextBox x:Name="TB_ActionViewer" TextWrapping="Wrap" Text="Action" Foreground="White" Background="Transparent" BorderBrush="White" Grid.Row="1"/>
             </Grid>
         </Grid>
 
         <GridSplitter Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Height="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="#FF7A798C"/>
-        
+
         <!-- Log -->
         <Grid Grid.Row="2" Grid.ColumnSpan="3" Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="3"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            
-            <TextBlock Text="日誌" Foreground="White" FontWeight="Bold" Margin="0,0,0,3"/>
-            <ListBox Name="List_Log" Grid.Row="1" Background="#5f000000" BorderThickness="0" Padding="5 2">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="日誌" Foreground="White" FontWeight="Bold"/>
+                <Button x:Name="B_CopyLog" Grid.Column="1" Content="📋" Style="{StaticResource ArkStyle_IconButton}" Click="B_CopyLog_Click"/>
+            </Grid>
+            <ListBox Name="List_Log" Grid.Row="2" Background="#5f000000" BorderThickness="0" Padding="5 2">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Message}">
