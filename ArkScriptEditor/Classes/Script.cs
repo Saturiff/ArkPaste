@@ -5,6 +5,7 @@ namespace ArkScriptEditor.Classes
     internal class Script : INotifyPropertyChanged
     {
         public required string Path { get; set; }
+        public required string Category { get; set; }
         public required string Name { get; set; }
         public required string Desc { get; set; }
         private ScriptState state;
@@ -27,7 +28,7 @@ namespace ArkScriptEditor.Classes
 
         public override string ToString()
         {
-            return string.Format("名稱：{0}\n描述：{1}\n狀態：{2}\n每條指令執行間隔：{3}", Name, Desc, State, ActionInterval);
+            return string.Format("組別：{0}\n名稱：{1}\n描述：{2}\n狀態：{3}\n每條指令執行間隔：{4}", Category, Name, Desc, State, ActionInterval);
         }
     }
 

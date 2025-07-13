@@ -5,11 +5,13 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using Button = System.Windows.Controls.Button;
 using CheckBox = System.Windows.Controls.CheckBox;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using Path = System.IO.Path;
 
 namespace ArkScriptEditor
 {
@@ -59,6 +61,10 @@ namespace ArkScriptEditor
             // initialize script tabs
 
             List_Script.ItemsSource = scripts;
+            CollectionView scriptListView = (CollectionView)CollectionViewSource.GetDefaultView(List_Script.ItemsSource);
+            PropertyGroupDescription groupDescription = new PropertyGroupDescription("Category");
+            scriptListView.GroupDescriptions.Add(groupDescription);
+
             ScanScriptFiles();
         }
 
@@ -245,38 +251,74 @@ namespace ArkScriptEditor
                 scripts.Clear();
             }
 
-            string scriptDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Script");
-            string[] filePaths = Directory.GetFiles(scriptDir, "*.lua");
-            foreach (string path in filePaths)
+            void ScanUnder(string dirPath)
             {
-                if (scriptReader.LoadScriptHide(path))
+                string category;
+                try
                 {
-                    Logger.Info(this, string.Format("略過了一個隱藏的腳本"));
-                    continue;
+                    category = new DirectoryInfo(dirPath).Name;
+                }
+                catch (Exception e)
+                {
+                    category = "Default";
+                    Logger.Warn(this, string.Format("無法從以下路徑得到其分組，移動至預設分組: {0} ({1})", dirPath, e));
                 }
 
-                string name = Path.GetFileNameWithoutExtension(path);
-                string desc = scriptReader.LoadScriptDescription(path);
-                if (desc == "")
+                if (category == "DefaultScripts")
                 {
-                    desc = name;
+                    category = "內建腳本集";
                 }
-                var actions = scriptReader.LoadScriptActions(path, out string actionDump);
-
-                Script script = new Script
+                else if (category == "Default" || category == "Script")
                 {
-                    Path = path,
-                    Name = name,
-                    Desc = desc,
-                    State = ScriptState.Idle,
-                    Actions = actions,
-                    ActionDump = actionDump,
-                    ActionInterval = scriptReader.LoadScriptGlobalDelay(path),
-                };
-                scripts.Add(script);
-                scriptRunners[script.Name] = new ScriptRunner(script);
+                    category = "預設分組";
+                }
+                else
+                {
+                    category = string.Format("使用者分組：{0}", category);
+                }
 
-                Logger.Info(this, string.Format("找到了腳本: {0} [{1}]", desc, name));
+                string[] filePaths = Directory.GetFiles(dirPath, "*.lua");
+                foreach (string path in filePaths)
+                {
+                    if (scriptReader.LoadScriptHide(path))
+                    {
+                        Logger.Info(this, string.Format("略過了一個隱藏的腳本"));
+                        continue;
+                    }
+
+                    string name = Path.GetFileNameWithoutExtension(path);
+                    string desc = scriptReader.LoadScriptDescription(path);
+                    if (desc == "")
+                    {
+                        desc = name;
+                    }
+                    var actions = scriptReader.LoadScriptActions(path, out string actionDump);
+
+                    Script script = new Script
+                    {
+                        Path = path,
+                        Category = category,
+                        Name = name,
+                        Desc = desc,
+                        State = ScriptState.Idle,
+                        Actions = actions,
+                        ActionDump = actionDump,
+                        ActionInterval = scriptReader.LoadScriptGlobalDelay(path),
+                    };
+                    scripts.Add(script);
+                    scriptRunners[script.Path] = new ScriptRunner(script);
+
+                    Logger.Info(this, string.Format("找到了腳本: {0} [{1}]", desc, name));
+                }
+            }
+
+            string scriptRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Script");
+            ScanUnder(scriptRootDir);
+
+            string[] dirPaths = Directory.GetDirectories(scriptRootDir);
+            foreach (string dirPath in new string[] { scriptRootDir }.Concat(dirPaths))
+            {
+                ScanUnder(dirPath);
             }
         }
 
@@ -298,7 +340,7 @@ namespace ArkScriptEditor
                 return null;
             }
 
-            if (scriptRunners.TryGetValue(script.Name, out ScriptRunner? runner) && runner != null)
+            if (scriptRunners.TryGetValue(script.Path, out ScriptRunner? runner) && runner != null)
             {
                 return runner;
             }
@@ -306,7 +348,7 @@ namespace ArkScriptEditor
             {
                 Logger.Error(this, string.Format("腳本 {0} 的 runner 不存在", script.Name));
                 runner = new ScriptRunner(script);
-                scriptRunners[script.Name] = runner;
+                scriptRunners[script.Path] = runner;
                 return runner;
             }
         }

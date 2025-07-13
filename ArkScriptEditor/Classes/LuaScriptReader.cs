@@ -70,7 +70,7 @@ namespace ArkScriptEditor.Classes
 
         public List<IScriptAction> LoadScriptActions(string scriptPath, out string actionDump)
         {
-            Logger.Info(this, string.Format("開始讀取 {0} 的動作清單...", Path.GetFileName(scriptPath)));
+            Logger.Info(this, string.Format("開始讀取 {0} 的動作清單...", GetLuaChunkName(scriptPath)));
 
             Lua? lua = LoadLua(scriptPath);
             if (lua == null)
@@ -174,16 +174,18 @@ namespace ArkScriptEditor.Classes
         {
             Lua lua = new Lua();
             lua.State.Encoding = Encoding.UTF8;
+            
             try
             {
-                lua.DoFile(scriptPath);
-                Logger.Info(this, string.Format("Lua文件解析成功: {0}", Path.GetFileName(scriptPath)));
+                var code = File.ReadAllText(scriptPath, Encoding.UTF8);
+                lua.DoString(code, scriptPath);
+                Logger.Info(this, string.Format("Lua文件解析成功: {0}", GetLuaChunkName(scriptPath)));
                 openedLua.Add(scriptPath, lua);
                 return lua;
             }
             catch (Exception e)
             {
-                Logger.Error(this, string.Format("解析Lua文件({0})時遇上了錯誤: {1}", Path.GetFileName(scriptPath), e));
+                Logger.Error(this, string.Format("解析Lua文件({0})時遇上了錯誤: {1}", GetLuaChunkName(scriptPath), e));
                 return null;
             }
         }
@@ -195,7 +197,13 @@ namespace ArkScriptEditor.Classes
                 lua?.Dispose();
                 openedLua.Remove(scriptPath);
             }
-            Logger.Info(this, string.Format("已關閉Lua文件: {0}", Path.GetFileName(scriptPath)));
+            Logger.Info(this, string.Format("已關閉Lua文件: {0}", GetLuaChunkName(scriptPath)));
+        }
+
+        private static string GetLuaChunkName(string scriptPath)
+        {
+            string chunkName = Path.GetRelativePath(AppDomain.CurrentDomain.BaseDirectory, scriptPath);
+            return chunkName;
         }
     }
 }

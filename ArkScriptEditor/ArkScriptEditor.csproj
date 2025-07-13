@@ -38,6 +38,12 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Update="Script\DefaultScripts\default_auto_click.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Script\DefaultScripts\default_auto_pick.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Script\define.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
