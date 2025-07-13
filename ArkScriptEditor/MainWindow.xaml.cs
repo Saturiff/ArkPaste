@@ -141,6 +141,12 @@ namespace ArkScriptEditor
             }
 
             Logger.Info(this, "停下全部腳本");
+
+            if (Check_StartScript.IsChecked ?? false)
+            {
+                Check_StartScript.IsChecked = false;
+            }
+
             var runners = scriptRunners.Values;
             foreach (var runner in runners)
             {
