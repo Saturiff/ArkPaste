@@ -115,6 +115,5 @@ namespace ArkScriptEditor.Classes
             }
             return IntPtr.Zero;
         }
-
     }
 }

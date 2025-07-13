@@ -223,7 +223,7 @@ namespace ArkScriptEditor
         {
             Dispatcher.Invoke(() =>
             {
-                LoggerEventArgs args = ((LoggerEventArgs)e);
+                LoggerEventArgs args = (LoggerEventArgs)e;
                 var item = args.GetLogItem();
                 logItems.Add(item);
             });
