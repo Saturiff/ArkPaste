@@ -41,6 +41,9 @@
     <None Update="Script\DefaultScripts\default_auto_click.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Script\DefaultScripts\default_auto_make.lua">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Script\DefaultScripts\default_auto_pick.lua">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
