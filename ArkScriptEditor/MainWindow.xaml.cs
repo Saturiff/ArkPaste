@@ -78,7 +78,7 @@ namespace ArkScriptEditor
 
 
             HotKeySetting[] hotkeyData = [
-                    new HotKeySetting {
+                new HotKeySetting {
                     ID = (int)HotKeyID.ToggleCurrent,
                     DefaultKey = Key.F7,
                     HotKeyBindedCallback = OnHotKeyBinded_ToggleCurrent,

@@ -8,7 +8,7 @@ H = require("Script.define")
 ]]--
 
 ---@type string 腳本描述
-Description = "全部拾取"
+Description = "全部制作"
 
 ---@type boolean 是否隱藏
 Hide = false
@@ -26,7 +26,10 @@ function Run()
     -- 在這個方法內新增你的腳本動作
 
     -- 按下按鍵 A
-    H:PressKey("A")
+    H:Repeat(10, function()
+        H:PressKey("A")
+        H:Wait(1000 * 50)
+    end)
 
     return H.data
 end
