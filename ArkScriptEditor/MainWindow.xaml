@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ArkScriptEditor"
         mc:Ignorable="d"
-        Title="ShuiNi" Height="440" Width="640" MinHeight="350" MinWidth="500" ShowInTaskbar="True" Background="#63627A" Topmost="True" ResizeMode="CanResizeWithGrip">
+        Title="LuArk" Height="440" Width="640" MinHeight="350" MinWidth="500" ShowInTaskbar="True" Background="#63627A" Topmost="True" ResizeMode="CanResizeWithGrip">
     <Window.Resources>
         <!-- Button style -->
         <Style x:Key="ArkStyle_Button" TargetType="Button">

@@ -6,12 +6,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>1.ico</ApplicationIcon>
+    <ApplicationIcon>res\icon.ico</ApplicationIcon>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="1.ico" />
+    <Content Include="res\icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
