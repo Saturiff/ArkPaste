@@ -9,24 +9,21 @@ namespace ArkScriptEditor.Classes
     {
         public static Color GetColorAt(Point location)
         {
-            Bitmap p = new Bitmap(1, 1, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             try
             {
-                using Graphics gdest = Graphics.FromImage(p);
-                using Graphics gsrc = Graphics.FromHwnd(nint.Zero);
-                nint hSrcDC = gsrc.GetHdc();
-                nint hDC = gdest.GetHdc();
-                int retval = BitBlt(hDC, 0, 0, 1, 1, hSrcDC, location.X, location.Y, (int)CopyPixelOperation.SourceCopy);
-                gdest.ReleaseHdc();
-                gsrc.ReleaseHdc();
+                IntPtr hdc = GetDC(IntPtr.Zero);
+                uint color = GetPixel(hdc, location.X, location.Y);
+                _ = ReleaseDC(IntPtr.Zero, hdc);
+                return Color.FromArgb(
+                    (int)(color & 0x000000FF),
+                    (int)(color & 0x0000FF00) >> 8,
+                    (int)(color & 0x00FF0000) >> 16);
             }
             catch
             {
                 Logger.Error("GetColorAt", "獲取顏色時發生了問題");
                 throw;
             }
-
-            return p.GetPixel(0, 0);
         }
 
         public static bool IsColorAt(Point location, Color c, int bias = 5)
@@ -70,8 +67,14 @@ namespace ArkScriptEditor.Classes
         [DllImport("user32")]
         private static extern bool PostMessage(nint hWnd, uint Msg, int wParam, int lParam);
 
-        [DllImport("gdi32", SetLastError = true)]
-        private static extern int BitBlt(nint hDC, int x, int y, int nWidth, int nHeight, nint hSrcDC, int xSrc, int ySrc, int dwRop);
+        [DllImport("user32.dll")]
+        static extern IntPtr GetDC(IntPtr hwnd);
+
+        [DllImport("user32.dll")]
+        static extern int ReleaseDC(IntPtr hwnd, IntPtr hdc);
+
+        [DllImport("gdi32.dll")]
+        public static extern uint GetPixel(IntPtr hdc, int nXPos, int nYPos);
 
         [DllImport("user32.dll")]
         public static extern bool SetCursorPos(int x, int y);
