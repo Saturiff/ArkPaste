@@ -124,8 +124,8 @@
             <ListView Name="List_Script" d:ItemsSource="{d:SampleData ItemCount=5}" Foreground="White" Background="Transparent" BorderBrush="White" SelectionMode="Single" Grid.Row="2">
                 <ListView.View>
                     <GridView ColumnHeaderContainerStyle="{StaticResource ArkStyle_ColumnHeader}">
-                        <GridViewColumn Header="描述/名稱" DisplayMemberBinding="{Binding Desc}"/>
-                        <GridViewColumn Header="執行中" DisplayMemberBinding="{Binding State}"/>
+                        <GridViewColumn Header="描述/名稱" DisplayMemberBinding="{Binding Desc}" Width="130"/>
+                        <GridViewColumn Header="執行中" DisplayMemberBinding="{Binding StateString}" Width="65"/>
                     </GridView>
                 </ListView.View>
                 <ListView.ItemContainerStyle>
@@ -198,7 +198,34 @@
                         <ColumnDefinition Width="120"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Name="Text_ScriptInfo" TextWrapping="Wrap" Text="Script information"/>
+                    <!--TextBlock Name="Text_ScriptInfo" TextWrapping="Wrap" Text="Script information"/-->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <!--Name, Desc, StateString, ActionInterval-->
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="組別"></TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedItem.Category, ElementName=List_Script}"></TextBlock>
+                        
+                        <TextBlock Grid.Row="1" Grid.Column="0"></TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="1"></TextBlock>
+                        
+                        <TextBlock Grid.Row="2" Grid.Column="0"></TextBlock>
+                        <TextBlock Grid.Row="2" Grid.Column="1"></TextBlock>
+                        
+                        <TextBlock Grid.Row="3" Grid.Column="0"></TextBlock>
+                        <TextBlock Grid.Row="3" Grid.Column="1"></TextBlock>
+
+                        <TextBlock Text="Script" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"></TextBlock>
+                    </Grid>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>

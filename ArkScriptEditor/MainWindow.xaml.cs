@@ -278,7 +278,7 @@ namespace ArkScriptEditor
                 }
                 else
                 {
-                    category = string.Format("使用者分組：{0}", category);
+                    category = string.Format("使用者分組: {0}", category);
                 }
 
                 string[] filePaths = Directory.GetFiles(dirPath, "*.lua");
@@ -319,8 +319,7 @@ namespace ArkScriptEditor
             string scriptRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Script");
             ScanUnder(scriptRootDir);
 
-            string[] dirPaths = Directory.GetDirectories(scriptRootDir);
-            foreach (string dirPath in new string[] { scriptRootDir }.Concat(dirPaths))
+            foreach (string dirPath in Directory.GetDirectories(scriptRootDir))
             {
                 ScanUnder(dirPath);
             }

@@ -23,7 +23,7 @@
                 LogLevel.Error => "錯誤",
                 _ => Level.ToString(),
             };
-            return string.Format("[{0}] {1}：{2}", ctxStr, logStr, Message);
+            return string.Format("[{0}] {1}: {2}", ctxStr, logStr, Message);
         }
     }
 

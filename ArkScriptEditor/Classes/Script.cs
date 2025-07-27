@@ -9,12 +9,25 @@ namespace ArkScriptEditor.Classes
         public required string Name { get; set; }
         public required string Desc { get; set; }
         private ScriptState state;
-        public ScriptState State {
+        public ScriptState State
+        {
             get => state;
             set
             {
                 state = value;
                 OnPropertyChanged(nameof(State));
+            }
+        }
+        public string StateString
+        {
+            get
+            {
+                return state switch
+                {
+                    ScriptState.Idle => "已停止",
+                    ScriptState.Running => "執行中",
+                    _ => "未定義",
+                };
             }
         }
         public required List<IScriptAction> Actions { get; set; }
@@ -28,7 +41,7 @@ namespace ArkScriptEditor.Classes
 
         public override string ToString()
         {
-            return string.Format("組別：{0}\n名稱：{1}\n描述：{2}\n狀態：{3}\n每條指令執行間隔：{4}", Category, Name, Desc, State, ActionInterval);
+            return string.Format("組別: {0}\n名稱: {1}\n描述: {2}\n狀態: {3}\n每 {4} 毫秒執行一條指令", Category, Name, Desc, StateString, ActionInterval);
         }
     }
 
