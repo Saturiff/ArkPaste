@@ -211,20 +211,20 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <!--Name, Desc, StateString, ActionInterval-->
-                        <TextBlock Grid.Row="0" Grid.Column="0" Text="組別"></TextBlock>
-                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedItem.Category, ElementName=List_Script}"></TextBlock>
-                        
-                        <TextBlock Grid.Row="1" Grid.Column="0"></TextBlock>
-                        <TextBlock Grid.Row="1" Grid.Column="1"></TextBlock>
-                        
-                        <TextBlock Grid.Row="2" Grid.Column="0"></TextBlock>
-                        <TextBlock Grid.Row="2" Grid.Column="1"></TextBlock>
-                        
-                        <TextBlock Grid.Row="3" Grid.Column="0"></TextBlock>
-                        <TextBlock Grid.Row="3" Grid.Column="1"></TextBlock>
 
-                        <TextBlock Text="Script" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"></TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="組別" Margin="0,0,10,0"></TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding SelectedItem.Category, ElementName=List_Script}"></TextBlock>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="名稱"></TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding SelectedItem.Name, ElementName=List_Script}"></TextBlock>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="描述"></TextBlock>
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SelectedItem.Desc, ElementName=List_Script}"></TextBlock>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="狀態"></TextBlock>
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding SelectedItem.StateString, ElementName=List_Script}"></TextBlock>
+
+                        <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding SelectedItem.ActionIntervalString, ElementName=List_Script}"></TextBlock>
                     </Grid>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>

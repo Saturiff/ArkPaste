@@ -40,7 +40,7 @@ namespace ArkScriptEditor
 
             // lua script info group box
 
-            Text_ScriptInfo.Text = "";
+            //Text_ScriptInfo.Text = "";
             List_Script.SelectionChanged += List_Script_OnSelectionChanged;
             Check_StartScript.Checked += Check_StartScript_StateUpdated;
             Check_StartScript.Unchecked += Check_StartScript_StateUpdated;
@@ -207,7 +207,7 @@ namespace ArkScriptEditor
                 runner.Stop();
             }
 
-            Text_ScriptInfo.Text = script.ToString();
+            //Text_ScriptInfo.Text = script.ToString();
         }
 
         private void List_Script_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -215,14 +215,14 @@ namespace ArkScriptEditor
             Script? script = GetCurrentScript();
             if (script != null)
             {
-                Text_ScriptInfo.Text = script.ToString();
+                //Text_ScriptInfo.Text = script.ToString();
                 TB_ActionViewer.Text = script.ActionDump;
                 Check_StartScript.IsEnabled = true;
                 Check_StartScript.IsChecked = script.State == ScriptState.Running;
             }
             else
             {
-                Text_ScriptInfo.Text = "";
+                //Text_ScriptInfo.Text = "";
                 TB_ActionViewer.Text = "選擇一個腳本";
                 Check_StartScript.IsEnabled = false;
                 Check_StartScript.IsChecked = false;

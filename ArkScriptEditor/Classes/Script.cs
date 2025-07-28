@@ -33,6 +33,13 @@ namespace ArkScriptEditor.Classes
         public required List<IScriptAction> Actions { get; set; }
         public required string ActionDump { get; set; }
         public int ActionInterval { get; set; } = 16;
+        public string ActionIntervalString
+        {
+            get
+            {
+                return string.Format("每 {0} 毫秒執行一條指令", ActionInterval);
+            }
+        }
 
 
         public event PropertyChangedEventHandler? PropertyChanged;
