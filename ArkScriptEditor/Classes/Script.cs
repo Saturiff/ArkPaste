@@ -15,7 +15,7 @@ namespace ArkScriptEditor.Classes
             set
             {
                 state = value;
-                OnPropertyChanged(nameof(State));
+                OnPropertyChanged(nameof(StateString));
             }
         }
         public string StateString
