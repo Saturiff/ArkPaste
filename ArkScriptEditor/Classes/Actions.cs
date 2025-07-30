@@ -75,10 +75,17 @@ namespace ArkScriptEditor.Classes
             for (int i = 0; i < s.Length; i++)
             {
                 char c = s[i];
-                if (Enum.TryParse(c.ToString(), out Keys outKey))
+
+                int digitFoundAt = "0123456789".IndexOf(c);
+                if (digitFoundAt >= 0)
+                {
+                    keysArr[i] = Keys.D0 + digitFoundAt;
+                    Logger.Info(this, string.Format("Got digit code '{0}' from ch '{1}'", keysArr[i], c));
+                }
+                else if (Enum.TryParse(c.ToString(), out Keys outKey))
                 {
                     keysArr[i] = outKey;
-                    Logger.Info(this, string.Format("Got '{0}' from ch '{1}'", outKey, c));
+                    Logger.Info(this, string.Format("Got alphabet code '{0}' from ch '{1}'", keysArr[i], c));
                 }
                 else
                 {
